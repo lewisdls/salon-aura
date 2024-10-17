@@ -1,0 +1,32 @@
+{
+  "kind": "collectionType",
+  "collectionName": "appointments",
+  "info": {
+    "singularName": "appointment",
+    "pluralName": "appointments",
+    "displayName": "Appointment"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "client_name": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "service": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::service.service"
+    },
+    "date": {
+      "type": "date"
+    },
+    "time": {
+      "type": "time"
+    }
+  }
+}
