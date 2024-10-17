@@ -91,7 +91,7 @@ const Team = () => {
                   className={`h-[375px] lg:w-[325px] bg-[#DAD1C9] rounded-3xl flex items-end justify-center`}
                 >
                   <img
-                    src={`http://localhost:1337${member.image.url}`}
+                    src={member.image.url}
                     alt=""
                     className="object-cover pointer-events-none h-[350px]"
                   />

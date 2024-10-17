@@ -27,7 +27,7 @@ const Hero = () => {
         ease: [0, 0.71, 0.2, 1.01],
       }}
       style={{
-        backgroundImage: `url(http://localhost:1337${header?.image.url})`,
+        backgroundImage: header?.image.url,
       }}
       className="bg-cover bg-center h-[90vh] text-white"
     >
