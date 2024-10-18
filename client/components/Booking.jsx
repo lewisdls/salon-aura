@@ -112,7 +112,7 @@ const Booking = ({ button }) => {
 
       // Fetch existing appointments for the selected date
       globalApi
-        .getAppointments(date)
+        .getAppointments()
         .then((res) => {
           const existingAppointments = res.data.data;
 
@@ -135,7 +135,7 @@ const Booking = ({ button }) => {
                 client_name: name,
                 phone: phone,
                 service: selectedService,
-                date: date,
+                date: formattedDate,
                 time: formattedTime,
               },
             };
