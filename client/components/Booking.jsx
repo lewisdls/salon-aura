@@ -110,7 +110,7 @@ const Booking = ({ button }) => {
 
       const formattedDate = format(date, "yyyy-MM-dd");
 
-      // Fetch existing appointments for the selected date
+      // Fetch existing appointments
       globalApi
         .getAppointments()
         .then((res) => {
@@ -143,7 +143,6 @@ const Booking = ({ button }) => {
             globalApi
               .bookAppointment(data)
               .then((res) => {
-                console.log(res);
                 res &&
                   toast.success("La cita fue programada exitosamente!", {
                     description: `${format(
