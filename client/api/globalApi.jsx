@@ -10,7 +10,7 @@ const axiosClient = axios.create({
   },
 });
 
-const getHeader = () => axiosClient.get("header?populate=*");
+const getHeader = () => axiosClient.get("/header?populate=*");
 
 const getMembers = () => axiosClient.get("/members?populate=*");
 

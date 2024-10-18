@@ -176,7 +176,7 @@ const Booking = ({ button }) => {
             cuando estés listo/a.
           </DialogDescription>
         </DialogHeader>
-        <div className="flex flex-col lg:flex-row gap-4 py-4 justify-between">
+        <div className="flex flex-col lg:flex-row gap-4 py-4 justify-between w-full ">
           <div className="flex flex-col gap-4">
             <Input
               id="name"

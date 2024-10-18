@@ -26,10 +26,7 @@ const Hero = () => {
         duration: 1,
         ease: [0, 0.71, 0.2, 1.01],
       }}
-      style={{
-        backgroundImage: header?.image.url,
-      }}
-      className="bg-cover bg-center h-[90vh] text-white"
+      className="bg-cover bg-center h-[90vh] text-white bg-[url('/hero-img.jpg')]"
     >
       <div className="h-full flex flex-col items-center md:items-start text-center md:text-left justify-center gap-10 mx-16">
         <div>
