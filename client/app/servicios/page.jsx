@@ -34,7 +34,7 @@ const Services = () => {
                 >
                   <div className="w-full h-[400px] md:h-[500px]">
                     <img
-                      src={`http://localhost:1337${service.image.url}`}
+                      src={service.image.url}
                       className="object-cover w-full h-full rounded-xl"
                       alt=""
                     />
