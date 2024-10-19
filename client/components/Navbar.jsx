@@ -44,7 +44,7 @@ const Navbar = () => {
     <div
       className={`flex items-center justify-between px-8 md:px-12 py-4 text-lg bg-transparent fixed top-0 w-full text-white z-50 transition-all
           ${navbar ? " active-navbar" : ""} ${
-        pathname !== "/" ? " active-navbar" : ""
+        pathname !== "/" ? " active-navbar sticky" : ""
       }`}
     >
       <div className="hidden md:bg-transparent md:static md:flex flex-col md:flex-row justify-center md:justify-start items-center gap-6">
