@@ -103,7 +103,7 @@ const Booking = ({ button }) => {
           hours24 = 0;
         }
 
-        return `${String(hours24).padStart(2, "0")}:${minute}:00.000`;
+        return `${String(hours24).padStart(2, "0")}:${minute}:00`;
       };
 
       const formattedTime = formatTime(selectedTimeSlot); // Convert selected time slot
