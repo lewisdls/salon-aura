@@ -110,9 +110,12 @@ const Booking = ({ button }) => {
 
       const formattedDate = format(date, "yyyy-MM-dd");
 
+      console.log("Formatted Date:", formattedDate);
+      console.log("Formatted Time:", formattedTime);
+
       // Fetch existing appointments
       globalApi
-        .getAppointments(`?_=${new Date().getTime()}`)
+        .getAppointments(date)
         .then((res) => {
           const existingAppointments = res.data.data;
 
