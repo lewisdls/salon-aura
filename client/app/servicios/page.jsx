@@ -24,7 +24,7 @@ const Services = () => {
         <h1 className="text-5xl md:text-6xl leading-tight md:leading-snug font-semibold text-center">
           Servicios
         </h1>
-        <div className="flex flex-col gap-16 w-full">
+        <div className="flex flex-col gap-20 w-full">
           {loading
             ? "Loading..."
             : services.map((service) => (
@@ -34,7 +34,7 @@ const Services = () => {
                 >
                   <div className="w-full h-[400px] md:h-[500px]">
                     <img
-                      src={service.image.url}
+                      src={`http://localhost:1337${service.image.url}`}
                       className="object-cover w-full h-full rounded-xl"
                       alt=""
                     />
