@@ -119,6 +119,8 @@ const Booking = ({ button }) => {
         .then((res) => {
           const existingAppointments = res.data.data;
 
+          console.log(existingAppointments);
+
           // Check if the selected time is already booked
           const isTimeBooked = existingAppointments.some(
             (appointment) =>
