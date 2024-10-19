@@ -110,16 +110,11 @@ const Booking = ({ button }) => {
 
       const formattedDate = format(date, "yyyy-MM-dd");
 
-      console.log("Formatted Date:", formattedDate);
-      console.log("Formatted Time:", formattedTime);
-
       // Fetch existing appointments
       globalApi
         .getAppointments(date)
         .then((res) => {
           const existingAppointments = res.data.data;
-
-          console.log(existingAppointments);
 
           // Check if the selected time is already booked
           const isTimeBooked = existingAppointments.some(
