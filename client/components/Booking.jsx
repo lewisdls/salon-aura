@@ -123,10 +123,20 @@ const Booking = ({ button }) => {
               appointment.date === formattedDate
           );
 
+          // Check if name has already booked for the selected date
+          const isPersonBooked = existingAppointments.some(
+            (appointment) =>
+              appointment.name === name && appointment.date === formattedDate
+          );
+
           if (isTimeBooked) {
             // Trigger toast if time is already booked
             toast.error(
               "La hora seleccionada ya está reservada, por favor elige otra hora."
+            );
+          } else if (isPersonBooked) {
+            toast.error(
+              "Ya haz agendado una cita para este día, por favor selecciona otra fecha."
             );
           } else {
             // If the time is not booked, proceed to save the booking
