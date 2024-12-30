@@ -1,6 +1,5 @@
 "use client";
 
-import globalApi from "@/api/globalApi";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
@@ -10,14 +9,17 @@ const Team = () => {
   const [members, setMembers] = useState([]);
 
   useEffect(() => {
-    getMembers();
+    const fetchMembers = async () => {
+      try {
+        const res = await fetch("/api/members");
+        const data = await res.json();
+        setMembers(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchMembers();
   }, []);
-
-  const getMembers = () => {
-    globalApi.getMembers().then((res) => {
-      setMembers(res.data.data);
-    });
-  };
 
   const prevSlide = () => {
     current !== 0 && setCurrent(current - 1);
@@ -91,7 +93,7 @@ const Team = () => {
                   className={`h-[375px] lg:w-[325px] bg-[#DAD1C9] rounded-3xl flex items-end justify-center`}
                 >
                   <img
-                    src={member.image.url}
+                    src={member.image}
                     alt=""
                     className="object-cover pointer-events-none h-[350px]"
                   />

@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import globalApi from "@/api/globalApi";
 import Booking from "@/components/Booking";
 
 const Services = () => {
@@ -9,13 +8,18 @@ const Services = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const getServices = () => {
-      globalApi.getServices().then((res) => {
-        setServices(res.data.data);
+    const fetchServices = async () => {
+      try {
+        const response = await fetch("/api/services");
+        const data = await response.json();
+        setServices(data);
+        console.log(data);
         setLoading(false);
-      });
+      } catch (error) {
+        console.error("Error fetching services:", error);
+      }
     };
-    getServices();
+    fetchServices();
   }, []);
 
   return (
@@ -34,7 +38,7 @@ const Services = () => {
                 >
                   <div className="w-full h-[400px] md:h-[500px]">
                     <img
-                      src={service.image.url}
+                      src={service.image}
                       className="object-cover w-full h-full rounded-xl"
                       alt=""
                     />

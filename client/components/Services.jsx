@@ -2,21 +2,8 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
-import globalApi from "@/api/globalApi";
 
 const Services = () => {
-  const [services, setServices] = useState([]);
-
-  useEffect(() => {
-    getServices();
-  }, []);
-
-  const getServices = () => {
-    globalApi.getServices().then((res) => {
-      setServices(res.data.data);
-    });
-  };
   return (
     <div
       id="services"

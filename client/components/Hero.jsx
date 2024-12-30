@@ -1,23 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-import globalApi from "@/api/globalApi";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import Booking from "./Booking";
 
 const Hero = () => {
-  const [header, setHeader] = useState();
-
-  useEffect(() => {
-    getHeader();
-  }, []);
-
-  const getHeader = () => {
-    globalApi.getHeader().then((res) => {
-      setHeader(res.data.data);
-    });
-  };
   return (
     <motion.div
       initial={{ opacity: -1 }}
@@ -31,7 +19,7 @@ const Hero = () => {
       <div className="h-full flex flex-col items-center md:items-start text-center md:text-left justify-center gap-10 mx-16">
         <div>
           <h1 className="text-5xl md:text-6xl leading-tight md:leading-snug font-semibold">
-            {header?.heading}
+            Date El Look Que Te Mereces
           </h1>
           <Booking
             button={
@@ -42,7 +30,9 @@ const Hero = () => {
           />
         </div>
         <p className="text-xl font-light leading-relaxed md:w-[55%]">
-          {header?.subtitle}
+          Descubra un mundo de sofisticación y belleza personalizada en Salon
+          Aura. Nuestro salón es más que un lugar para cortarse el pelo, es un
+          refugio donde su estilo único es el centro de atención.
         </p>
       </div>
     </motion.div>

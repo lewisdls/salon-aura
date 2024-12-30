@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import { MdAccessTime } from "react-icons/md";
-import globalApi from "@/api/globalApi";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { Calendar } from "@/components/ui/calendar";
@@ -41,15 +40,30 @@ const Booking = ({ button }) => {
   const [timeSlot, setTimeSlot] = useState();
   const [selectedTimeSlot, setSelectedTimeSlot] = useState();
   const [services, setServices] = useState([]);
-
-  const getServices = () => {
-    globalApi.getServices().then((res) => {
-      setServices(res.data.data);
-    });
-  };
+  const [appointments, setAppointments] = useState([]);
 
   useEffect(() => {
-    getServices();
+    const fetchApps = async () => {
+      try {
+        const response = await fetch("/api/appointments");
+        const data = await response.json();
+        setAppointments(data);
+        console.log(data);
+      } catch (error) {
+        console.error("Error fetching appointments:", error);
+      }
+    };
+    const fetchServices = async () => {
+      try {
+        const response = await fetch("/api/services");
+        const data = await response.json();
+        setServices(data);
+      } catch (error) {
+        console.error("Error fetching services:", error);
+      }
+    };
+    fetchApps();
+    fetchServices();
   }, []);
 
   const getTime = () => {
@@ -110,66 +124,71 @@ const Booking = ({ button }) => {
 
       const formattedDate = format(date, "yyyy-MM-dd");
 
-      // Fetch existing appointments
-      globalApi
-        .getAppointments(date)
-        .then((res) => {
-          const existingAppointments = res.data.data;
+      const existingAppointments = appointments;
 
-          // Check if the selected time is already booked
-          const isTimeBooked = existingAppointments.some(
-            (appointment) =>
-              appointment.time === formattedTime &&
-              appointment.date === formattedDate
-          );
+      // Check if the selected time is already booked
+      const isTimeBooked = existingAppointments.some(
+        (appointment) =>
+          appointment.time === formattedTime &&
+          appointment.date === formattedDate
+      );
 
-          // Check if client has already booked for the selected date
-          const isPersonBooked = existingAppointments.some(
-            (appointment) =>
-              appointment.client_name === name &&
-              appointment.date === formattedDate
-          );
+      // Check if client has already booked for the selected date
+      const isPersonBooked = existingAppointments.some(
+        (appointment) =>
+          appointment.client_name === name && appointment.date === formattedDate
+      );
 
-          if (isPersonBooked) {
-            toast.error(
-              "Ya haz agendado una cita para este día, por favor selecciona otra fecha."
-            );
-          } else if (isTimeBooked) {
-            // Trigger toast if time is already booked
-            toast.error(
-              "La hora seleccionada ya está reservada, por favor elige otra hora."
-            );
-          } else {
-            // If the time is not booked, proceed to save the booking
-            const data = {
-              data: {
-                client_name: name,
-                phone: phone,
-                service: selectedService,
-                date: formattedDate,
-                time: formattedTime,
+      if (isPersonBooked) {
+        toast.error(
+          "Ya haz agendado una cita para este día, por favor selecciona otra fecha."
+        );
+      } else if (isTimeBooked) {
+        // Trigger toast if time is already booked
+        toast.error(
+          "La hora seleccionada ya está reservada, por favor elige otra hora."
+        );
+      } else {
+        // If the time is not booked, proceed to save the booking
+        const data = {
+          client_name: name,
+          client_phone: phone,
+          service: selectedService,
+          date: formattedDate,
+          time: formattedTime,
+        };
+
+        const bookAppointment = async () => {
+          try {
+            const res = await fetch("/api/appointments", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
               },
-            };
+              body: JSON.stringify(data),
+            });
 
-            globalApi
-              .bookAppointment(data)
-              .then((res) => {
-                res &&
-                  toast.success("La cita fue programada exitosamente!", {
-                    description: `${format(
-                      date,
-                      "PPP"
-                    )} a las ${selectedTimeSlot}`,
-                  });
-              })
-              .catch((error) => {
-                console.error("Error:", error); // Log any errors from the API
-              });
+            if (!res.ok) {
+              const errorData = await res.json();
+              throw new Error(errorData.error || "Something went wrong");
+            }
+
+            const newAppointment = await res.json();
+            setAppointments((prevAppointments) => [
+              ...prevAppointments,
+              newAppointment,
+            ]);
+
+            toast.success("La cita fue programada exitosamente!", {
+              description: `${format(date, "PPP")} a las ${selectedTimeSlot}`,
+            });
+          } catch (error) {
+            console.log(error);
           }
-        })
-        .catch((error) => {
-          console.error("Error fetching appointments:", error);
-        });
+        };
+
+        bookAppointment();
+      }
     }
   };
 
@@ -240,7 +259,7 @@ const Booking = ({ button }) => {
                   <SelectGroup>
                     <SelectLabel>Servicios</SelectLabel>
                     {services?.map((service) => (
-                      <SelectItem value={service.id} key={service.id}>
+                      <SelectItem value={service.name} key={service.id}>
                         {service.name}
                       </SelectItem>
                     ))}
