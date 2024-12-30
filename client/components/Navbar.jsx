@@ -5,24 +5,36 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AiOutlineMenu } from "react-icons/ai";
 
-const NavLinks = () => {
-  return (
-    <>
-      <Link href="/" onClick={() => window.scrollTo(0, 0)}>
-        Inicio
-      </Link>
-      <Link href="/servicios" onClick={() => window.scrollTo(0, 0)}>
-        Servicios
-      </Link>
-      <p>Sobre Nosotros</p>
-    </>
-  );
-};
-
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [navbar, setNavBar] = useState(false);
   const pathname = usePathname();
+
+  const NavLinks = () => {
+    return (
+      <>
+        <Link
+          href="/"
+          onClick={() => {
+            window.scrollTo(0, 0);
+            setIsOpen(false);
+          }}
+        >
+          Inicio
+        </Link>
+        <Link
+          href="/servicios"
+          onClick={() => {
+            window.scrollTo(0, 0);
+            setIsOpen(false);
+          }}
+        >
+          Servicios
+        </Link>
+        <p>Sobre Nosotros</p>
+      </>
+    );
+  };
 
   const handleMenu = () => {
     setIsOpen(!isOpen);
