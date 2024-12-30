@@ -48,7 +48,6 @@ const Booking = ({ button }) => {
         const response = await fetch("/api/appointments");
         const data = await response.json();
         setAppointments(data);
-        console.log(data);
       } catch (error) {
         console.error("Error fetching appointments:", error);
       }

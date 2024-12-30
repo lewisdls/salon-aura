@@ -13,7 +13,6 @@ const Services = () => {
         const response = await fetch("/api/services");
         const data = await response.json();
         setServices(data);
-        console.log(data);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching services:", error);
