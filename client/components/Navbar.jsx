@@ -31,7 +31,6 @@ const Navbar = () => {
         >
           Servicios
         </Link>
-        <p>Sobre Nosotros</p>
       </>
     );
   };
