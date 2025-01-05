@@ -97,31 +97,31 @@ const Booking = ({ button }) => {
     getTime();
   }, []);
 
+  // Convert time to 'HH:mm:ss.SSS' format
+  const formatTime = (time) => {
+    const [hour, minutePeriod] = time.split(":");
+    const minute = minutePeriod.slice(0, 2);
+    const period = minutePeriod.slice(3); // AM or PM
+
+    let hours24 = parseInt(hour, 10);
+
+    // Convert to 24-hour format
+    if (period === "PM" && hours24 < 12) {
+      hours24 += 12;
+    } else if (period === "AM" && hours24 === 12) {
+      hours24 = 0;
+    }
+
+    return `${String(hours24).padStart(2, "0")}:${minute}:00`;
+  };
+
   const saveBooking = () => {
     if (!name || !phone || !selectedService || !date || !selectedTimeSlot) {
       toast.error("Favor de llenar todos los campos requeridos.");
     } else {
-      // Convert time to 'HH:mm:ss.SSS' format
-      const formatTime = (time) => {
-        const [hour, minutePeriod] = time.split(":");
-        const minute = minutePeriod.slice(0, 2);
-        const period = minutePeriod.slice(3); // AM or PM
-
-        let hours24 = parseInt(hour, 10);
-
-        // Convert to 24-hour format
-        if (period === "PM" && hours24 < 12) {
-          hours24 += 12;
-        } else if (period === "AM" && hours24 === 12) {
-          hours24 = 0;
-        }
-
-        return `${String(hours24).padStart(2, "0")}:${minute}:00`;
-      };
+      const formattedDate = format(date, "yyyy-MM-dd");
 
       const formattedTime = formatTime(selectedTimeSlot); // Convert selected time slot
-
-      const formattedDate = format(date, "yyyy-MM-dd");
 
       const existingAppointments = appointments;
 
@@ -278,6 +278,14 @@ const Booking = ({ button }) => {
                   onClick={() => setSelectedTimeSlot(time.time)}
                   className={`text-sm self-center text-center p-2 border rounded-full cursor-pointer transition-all hover:bg-[#9E2B2A] hover:text-white ${
                     time.time === selectedTimeSlot && "bg-[#9E2B2A] text-white"
+                  } ${
+                    date &&
+                    appointments.some(
+                      (appointment) =>
+                        appointment.time === formatTime(time.time) &&
+                        appointment.date === format(date, "yyyy-MM-dd")
+                    ) &&
+                    "bg-slate-200 text-gray-400 cursor-not-allowed pointer-events-none"
                   }`}
                 >
                   {time.time}
