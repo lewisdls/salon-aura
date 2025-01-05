@@ -23,7 +23,7 @@ const Services = () => {
   }, []);
 
   return (
-    <div className="p-6 md:p-16 flex items-center bg-[#FAF5F1] w-full">
+    <div className="p-6 md:px-16 md:py-10 flex items-center bg-[#FAF5F1] w-full">
       <motion.div
         initial={{ opacity: -1 }}
         whileInView={{ opacity: 1 }}
@@ -31,7 +31,7 @@ const Services = () => {
           duration: 1,
           ease: [0, 0.71, 0.2, 1.01],
         }}
-        className="flex flex-col gap-10 md:gap-20 w-full min-h-screen"
+        className="flex flex-col gap-10 md:gap-12 w-full min-h-screen"
       >
         <h1 className="text-5xl md:text-6xl leading-tight md:leading-snug font-semibold text-center">
           Servicios
