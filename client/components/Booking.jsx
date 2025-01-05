@@ -22,6 +22,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const Booking = ({ button }) => {
   const [name, setName] = useState("");
@@ -197,12 +199,13 @@ const Booking = ({ button }) => {
               placeholder="Ingresa tu número de celular"
             />
             <div className="flex lg:flex-col gap-4">
-              <Input
-                type="date"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-                min={new Date().toISOString().split("T")[0]}
-              ></Input>
+              <DatePicker
+                selected={date}
+                onChange={(date) => setDate(date)}
+                minDate={new Date()} // Disable past dates
+                placeholderText="Selecciona la fecha"
+                className="border rounded-md px-3 py-2 text-sm placeholder:text-gray-500"
+              />
               <Select
                 value={selectedService}
                 onValueChange={setSelectedService}
