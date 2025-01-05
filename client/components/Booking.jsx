@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/select";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { format } from "date-fns";
 
 const Booking = ({ button }) => {
   const [name, setName] = useState("");
@@ -103,6 +104,7 @@ const Booking = ({ button }) => {
     if (!name || !phone || !selectedService || !date || !selectedTimeSlot) {
       toast.error("Favor de llenar todos los campos requeridos.");
     } else {
+      const formattedDate = format(date, "yyyy-MM-dd");
       const formattedTime = formatTime(selectedTimeSlot); // Convert selected time slot
 
       const existingAppointments = appointments;
@@ -110,13 +112,14 @@ const Booking = ({ button }) => {
       // Check if the selected time is already booked
       const isTimeBooked = existingAppointments.some(
         (appointment) =>
-          appointment.time === formattedTime && appointment.date === date
+          appointment.time === formattedTime &&
+          appointment.date === formattedDate
       );
 
       // Check if client has already booked for the selected date
       const isPersonBooked = existingAppointments.some(
         (appointment) =>
-          appointment.client_name === name && appointment.date === date
+          appointment.client_name === name && appointment.date === formattedDate
       );
 
       if (isPersonBooked) {
@@ -134,7 +137,7 @@ const Booking = ({ button }) => {
           client_name: name,
           client_phone: phone,
           service: selectedService,
-          date: date,
+          date: formattedDate,
           time: formattedTime,
         };
 
@@ -160,7 +163,7 @@ const Booking = ({ button }) => {
             ]);
 
             toast.success("La cita fue programada exitosamente!", {
-              description: `${date} a las ${selectedTimeSlot}`,
+              description: `${formattedDate} a las ${selectedTimeSlot}`,
             });
           } catch (error) {
             console.log(error);
@@ -242,7 +245,7 @@ const Booking = ({ button }) => {
                     appointments.some(
                       (appointment) =>
                         appointment.time === formatTime(time.time) &&
-                        appointment.date === date
+                        appointment.date === format(date, "yyyy-MM-dd")
                     ) &&
                     "bg-slate-200 text-gray-400 cursor-not-allowed pointer-events-none"
                   }`}
