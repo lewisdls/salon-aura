@@ -62,22 +62,13 @@ const Booking = ({ button }) => {
       timeList.push({
         time: i + ":00 AM",
       });
-      timeList.push({
-        time: i + ":30 AM",
-      });
     }
     timeList.push({
       time: "12:00 PM",
     });
-    timeList.push({
-      time: "12:30 PM",
-    });
-    for (let i = 1; i <= 6; i++) {
+    for (let i = 1; i <= 8; i++) {
       timeList.push({
         time: i + ":00 PM",
-      });
-      timeList.push({
-        time: i + ":30 PM",
       });
     }
 
@@ -197,7 +188,6 @@ const Booking = ({ button }) => {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Ingresa tu nombre"
-              className="col-span-3"
             />
             <Input
               id="phone"
@@ -205,7 +195,6 @@ const Booking = ({ button }) => {
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder="Ingresa tu número de celular"
-              className="col-span-3"
             />
             <div className="flex lg:flex-col gap-4">
               <Input
