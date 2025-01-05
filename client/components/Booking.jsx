@@ -1,16 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { MdAccessTime } from "react-icons/md";
-import { cn } from "@/lib/utils";
 import { toast } from "sonner";
-import { Calendar } from "@/components/ui/calendar";
-import { Calendar as CalendarIcon } from "lucide-react";
-import { format } from "date-fns";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { Button } from "./ui/button";
 import {
   Dialog,
@@ -119,8 +110,6 @@ const Booking = ({ button }) => {
     if (!name || !phone || !selectedService || !date || !selectedTimeSlot) {
       toast.error("Favor de llenar todos los campos requeridos.");
     } else {
-      const formattedDate = format(date, "yyyy-MM-dd");
-
       const formattedTime = formatTime(selectedTimeSlot); // Convert selected time slot
 
       const existingAppointments = appointments;
@@ -128,14 +117,13 @@ const Booking = ({ button }) => {
       // Check if the selected time is already booked
       const isTimeBooked = existingAppointments.some(
         (appointment) =>
-          appointment.time === formattedTime &&
-          appointment.date === formattedDate
+          appointment.time === formattedTime && appointment.date === date
       );
 
       // Check if client has already booked for the selected date
       const isPersonBooked = existingAppointments.some(
         (appointment) =>
-          appointment.client_name === name && appointment.date === formattedDate
+          appointment.client_name === name && appointment.date === date
       );
 
       if (isPersonBooked) {
@@ -153,7 +141,7 @@ const Booking = ({ button }) => {
           client_name: name,
           client_phone: phone,
           service: selectedService,
-          date: formattedDate,
+          date: date,
           time: formattedTime,
         };
 
@@ -179,7 +167,7 @@ const Booking = ({ button }) => {
             ]);
 
             toast.success("La cita fue programada exitosamente!", {
-              description: `${format(date, "PPP")} a las ${selectedTimeSlot}`,
+              description: `${date} a las ${selectedTimeSlot}`,
             });
           } catch (error) {
             console.log(error);
@@ -220,33 +208,12 @@ const Booking = ({ button }) => {
               className="col-span-3"
             />
             <div className="flex lg:flex-col gap-4">
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant={"outline"}
-                    className={cn(
-                      "w-[280px] justify-start text-left font-normal",
-                      !date && "text-muted-foreground"
-                    )}
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {date ? (
-                      format(date, "PPP")
-                    ) : (
-                      <span>Selecciona la fecha</span>
-                    )}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
-                  <Calendar
-                    mode="single"
-                    selected={date}
-                    onSelect={setDate}
-                    disabled={(d) => d < new Date().setHours(0, 0, 0, 0)}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
+              <Input
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                min={new Date().toISOString().split("T")[0]}
+              ></Input>
               <Select
                 value={selectedService}
                 onValueChange={setSelectedService}
@@ -283,7 +250,7 @@ const Booking = ({ button }) => {
                     appointments.some(
                       (appointment) =>
                         appointment.time === formatTime(time.time) &&
-                        appointment.date === format(date, "yyyy-MM-dd")
+                        appointment.date === date
                     ) &&
                     "bg-slate-200 text-gray-400 cursor-not-allowed pointer-events-none"
                   }`}
