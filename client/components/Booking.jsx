@@ -193,6 +193,7 @@ const Booking = ({ button }) => {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Ingresa tu nombre"
+              maximum-scale={1}
             />
             <Input
               id="phone"
@@ -200,6 +201,7 @@ const Booking = ({ button }) => {
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder="Ingresa tu número de celular"
+              maximum-scale={1}
             />
             <div className="flex lg:flex-col gap-4">
               <DatePicker
@@ -208,6 +210,7 @@ const Booking = ({ button }) => {
                 minDate={new Date()} // Disable past dates
                 placeholderText="Selecciona la fecha"
                 className="border rounded-md px-3 py-2 text-sm placeholder:text-gray-500"
+                maximum-scale={1}
               />
               <Select
                 value={selectedService}
