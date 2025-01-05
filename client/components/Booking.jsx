@@ -222,20 +222,14 @@ const Booking = ({ button }) => {
             <div className="flex lg:flex-col gap-4">
               <Popover>
                 <PopoverTrigger asChild>
-                  <Button
-                    variant={"outline"}
-                    className={cn(
-                      "w-[280px] justify-start text-left font-normal",
-                      !date && "text-muted-foreground"
-                    )}
-                  >
+                  <button className="flex items-center border rounded-sm px-2 py-2 w-[280px] justify-start text-left text-sm font-normal">
                     <CalendarIcon className="mr-2 h-4 w-4" />
                     {date ? (
                       format(date, "PPP")
                     ) : (
                       <span>Selecciona la fecha</span>
                     )}
-                  </Button>
+                  </button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0">
                   <Calendar
