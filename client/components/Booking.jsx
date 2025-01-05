@@ -209,7 +209,7 @@ const Booking = ({ button }) => {
                 onChange={(date) => setDate(date)}
                 minDate={new Date()} // Disable past dates
                 placeholderText="Selecciona la fecha"
-                className="border rounded-md text-base md:text-sm px-3 py-2 placeholder:text-gray-500"
+                className="w-[175px] md:w-full border rounded-md text-base md:text-sm px-3 py-2 placeholder:text-gray-500"
               />
               <Select
                 value={selectedService}
