@@ -82,8 +82,8 @@ const Booking = ({ button }) => {
     getTime();
   }, []);
 
-  // Convert time to 'HH:mm:ss.SSS' format
-  const formatTime = (time) => {
+  // Convert 12-hour time format to 24-hour format for comparison (HH:mm)
+  const convertTo24HourFormat = (time) => {
     const [hour, minutePeriod] = time.split(":");
     const minute = minutePeriod.slice(0, 2);
     const period = minutePeriod.slice(3); // AM or PM
@@ -108,7 +108,11 @@ const Booking = ({ button }) => {
     return `${String(hours).padStart(2, "0")}:${minute} ${period}`;
   };
 
-  const currentTime = new Date().toLocaleTimeString();
+  // Get the current local time in 'HH:mm' format
+  const currentTime = new Date().toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
   const today = new Date().toLocaleDateString();
 
   const saveBooking = () => {
@@ -188,18 +192,20 @@ const Booking = ({ button }) => {
 
   const isSlotDisabled = (time) => {
     if (date) {
+      const formattedTime = convertTo24HourFormat(time.time);
       const isPastTime =
-        formatTime(time.time) <= formatTime(currentTime) &&
+        formattedTime <= convertTo24HourFormat(currentTime) &&
         format(date, "yyyy-MM-dd") === format(today, "yyyy-MM-dd");
 
       const isBooked = appointments.some(
         (appointment) =>
-          appointment.time === regularTime(time.time) &&
+          regularTime(time.time) === appointment.time &&
           appointment.date === format(date, "yyyy-MM-dd")
       );
 
       return isPastTime || isBooked;
     }
+    return false;
   };
 
   return (
