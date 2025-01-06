@@ -183,23 +183,70 @@ const Booking = ({ button }) => {
     }
   };
 
-  const currentTime = new Date().toLocaleTimeString();
+  // Convert a 12-hour time (with AM/PM) to 24-hour time (HH:mm)
+  const convertTo24HourFormat = (time) => {
+    const [timeStr, period] = time.split(" ");
+    let [hours, minutes] = timeStr.split(":").map(Number);
+
+    if (period === "PM" && hours !== 12) {
+      hours += 12; // Convert PM hour to 24-hour format (except for 12 PM)
+    }
+    if (period === "AM" && hours === 12) {
+      hours = 0; // Convert 12 AM to 00:00
+    }
+
+    return (
+      String(hours).padStart(2, "0") + ":" + String(minutes).padStart(2, "0")
+    );
+  };
+
+  // Convert time to local time zone based on the device's local time
+  const getLocalTime = () => {
+    const now = new Date();
+    return now.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      timeZoneName: "short",
+    });
+  };
+
+  // Get the current local time in 'HH:mm' format
+  const currentTime = convertTo24HourFormat(getLocalTime());
+
+  // Get the current local date in 'yyyy-MM-dd' format
   const today = new Date().toLocaleDateString();
+
+  console.log("Current Time (Local):", currentTime);
+  console.log("Today (Local):", today);
 
   const isSlotDisabled = (time) => {
     if (date) {
+      // Format the provided time for comparison
+      const formattedTime = convertTo24HourFormat(time.time);
+      if (!formattedTime) return false; // If time is invalid, don't disable the slot
+
+      console.log("Formatted Slot Time:", formattedTime);
+
+      // Compare times to see if the slot is in the past
       const isPastTime =
-        formatTime(time.time) <= formatTime(currentTime) &&
+        formattedTime <= currentTime &&
         format(date, "yyyy-MM-dd") === format(today, "yyyy-MM-dd");
 
+      console.log("Is Slot Past Time:", isPastTime);
+
+      // Check if the slot is already booked
       const isBooked = appointments.some(
         (appointment) =>
-          appointment.time === regularTime(time.time) &&
-          appointment.date === format(date, "yyyy-MM-dd")
+          convertTo24HourFormat(appointment.time) === formattedTime &&
+          format(date, "yyyy-MM-dd") === format(today, "yyyy-MM-dd")
       );
 
+      console.log("Is Slot Booked:", isBooked);
+
+      // Return true if the slot is disabled (either past or already booked)
       return isPastTime || isBooked;
     }
+    return false;
   };
 
   return (
