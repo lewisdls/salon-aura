@@ -113,7 +113,6 @@ const Booking = ({ button }) => {
       toast.error("Favor de llenar todos los campos requeridos.");
     } else {
       const formattedDate = format(date, "yyyy-MM-dd");
-      const formattedTime = formatTime(selectedTimeSlot); // Convert selected time slot
       const regulatedTime = regularTime(selectedTimeSlot);
 
       const existingAppointments = appointments;
@@ -121,14 +120,8 @@ const Booking = ({ button }) => {
       // Check if the selected time is already booked
       const isTimeBooked = existingAppointments.some(
         (appointment) =>
-          appointment.time === formattedTime &&
+          appointment.time === regulatedTime &&
           appointment.date === formattedDate
-      );
-
-      // Check if client has already booked for the selected date
-      const isPersonBooked = existingAppointments.some(
-        (appointment) =>
-          appointment.client_name === name && appointment.date === formattedDate
       );
 
       if (isPersonBooked) {
@@ -162,6 +155,9 @@ const Booking = ({ button }) => {
 
             if (!res.ok) {
               const errorData = await res.json();
+              if (res.status === 400 && errorData.error.includes("reservada")) {
+                throw new Error(errorData.error);
+              }
               throw new Error(errorData.error || "Something went wrong");
             }
 
@@ -174,8 +170,17 @@ const Booking = ({ button }) => {
             toast.success("La cita fue programada exitosamente!", {
               description: `${formattedDate} a las ${regulatedTime}`,
             });
+
+            setSelectedTimeSlot();
           } catch (error) {
             console.log(error);
+            if (error.message.includes("reservada")) {
+              toast.error(error.message);
+            } else {
+              toast.error(
+                "No se pudo programar la cita. Inténtalo de nuevo más tarde."
+              );
+            }
           }
         };
 
@@ -270,12 +275,11 @@ const Booking = ({ button }) => {
                     key={index}
                     onClick={() => setSelectedTimeSlot(time.time)}
                     className={`text-sm self-center text-center p-2 border rounded-full cursor-pointer transition-all hover:bg-[#9E2B2A] hover:text-white ${
-                      time.time === selectedTimeSlot &&
-                      "bg-[#9E2B2A] text-white"
-                    } ${
-                      isSlotDisabled(time) &&
-                      "bg-slate-200 text-gray-400 cursor-not-allowed pointer-events-none"
-                    }`}
+                      isSlotDisabled(time)
+                        ? "bg-slate-200 text-gray-400 cursor-not-allowed pointer-events-none"
+                        : time.time === selectedTimeSlot &&
+                          "bg-[#9E2B2A] text-white"
+                    } `}
                   >
                     {time.time}
                   </span>

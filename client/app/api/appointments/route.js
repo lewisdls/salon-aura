@@ -52,6 +52,25 @@ export async function POST(req) {
     });
     */
 
+    const existingAppointment = await prisma.appointment.findFirst({
+      where: {
+        date,
+        time,
+      },
+    });
+    if (existingAppointment) {
+      return new Response(
+        JSON.stringify({
+          error:
+            "La hora seleccionada ya está reservada, por favor elige otra hora.",
+        }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
+
     const newAppointment = await prisma.appointment.create({
       data: {
         client_name,
