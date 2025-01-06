@@ -89,15 +89,23 @@ const Booking = ({ button }) => {
     const period = minutePeriod.slice(3); // AM or PM
 
     let hours24 = parseInt(hour, 10);
-
-    // Convert to 24-hour format
-    if (period === "PM" && hours24 < 12) {
+    if (period === "PM" && hours24 !== 12) {
       hours24 += 12;
     } else if (period === "AM" && hours24 === 12) {
       hours24 = 0;
     }
 
-    return `${String(hours24).padStart(2, "0")}:${minute}:00`;
+    return `${String(hours24).padStart(2, "0")}:${minute}`;
+  };
+
+  const regularTime = (time) => {
+    const [hour, minutePeriod] = time.split(":");
+    const minute = minutePeriod.slice(0, 2);
+    const period = minutePeriod.slice(3); // AM or PM
+
+    let hours = parseInt(hour, 10);
+
+    return `${String(hours).padStart(2, "0")}:${minute} ${period}`;
   };
 
   const saveBooking = () => {
@@ -106,6 +114,7 @@ const Booking = ({ button }) => {
     } else {
       const formattedDate = format(date, "yyyy-MM-dd");
       const formattedTime = formatTime(selectedTimeSlot); // Convert selected time slot
+      const regulatedTime = regularTime(selectedTimeSlot);
 
       const existingAppointments = appointments;
 
@@ -138,7 +147,7 @@ const Booking = ({ button }) => {
           client_phone: phone,
           service: selectedService,
           date: formattedDate,
-          time: formattedTime,
+          time: regulatedTime,
         };
 
         const bookAppointment = async () => {
@@ -163,7 +172,7 @@ const Booking = ({ button }) => {
             ]);
 
             toast.success("La cita fue programada exitosamente!", {
-              description: `${formattedDate} a las ${selectedTimeSlot}`,
+              description: `${formattedDate} a las ${regulatedTime}`,
             });
           } catch (error) {
             console.log(error);
@@ -172,6 +181,25 @@ const Booking = ({ button }) => {
 
         bookAppointment();
       }
+    }
+  };
+
+  const currentTime = new Date().toLocaleTimeString();
+  const today = new Date().toLocaleDateString();
+
+  const isSlotDisabled = (time) => {
+    if (date) {
+      const isPastTime =
+        formatTime(time.time) <= formatTime(currentTime) &&
+        format(date, "yyyy-MM-dd") === format(today, "yyyy-MM-dd");
+
+      const isBooked = appointments.some(
+        (appointment) =>
+          appointment.time === regularTime(time.time) &&
+          appointment.date === format(date, "yyyy-MM-dd")
+      );
+
+      return isPastTime || isBooked;
     }
   };
 
@@ -236,25 +264,23 @@ const Booking = ({ button }) => {
               <MdAccessTime /> Seleccione la hora
             </p>
             <div className="grid grid-cols-4 gap-2 rounded-md border p-3">
-              {timeSlot?.map((time, index) => (
-                <span
-                  key={index}
-                  onClick={() => setSelectedTimeSlot(time.time)}
-                  className={`text-sm self-center text-center p-2 border rounded-full cursor-pointer transition-all hover:bg-[#9E2B2A] hover:text-white ${
-                    time.time === selectedTimeSlot && "bg-[#9E2B2A] text-white"
-                  } ${
-                    date &&
-                    appointments.some(
-                      (appointment) =>
-                        appointment.time === formatTime(time.time) &&
-                        appointment.date === format(date, "yyyy-MM-dd")
-                    ) &&
-                    "bg-slate-200 text-gray-400 cursor-not-allowed pointer-events-none"
-                  }`}
-                >
-                  {time.time}
-                </span>
-              ))}
+              {timeSlot?.map((time, index) => {
+                return (
+                  <span
+                    key={index}
+                    onClick={() => setSelectedTimeSlot(time.time)}
+                    className={`text-sm self-center text-center p-2 border rounded-full cursor-pointer transition-all hover:bg-[#9E2B2A] hover:text-white ${
+                      time.time === selectedTimeSlot &&
+                      "bg-[#9E2B2A] text-white"
+                    } ${
+                      isSlotDisabled(time) &&
+                      "bg-slate-200 text-gray-400 cursor-not-allowed pointer-events-none"
+                    }`}
+                  >
+                    {time.time}
+                  </span>
+                );
+              })}
             </div>
           </div>
         </div>
