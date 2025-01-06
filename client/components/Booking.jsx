@@ -124,7 +124,7 @@ const Booking = ({ button }) => {
 
       if (isPersonBooked) {
         toast.error(
-          "Ya haz agendado una cita para este día, por favor selecciona otra fecha."
+          "Ya has agendado una cita para este día, por favor selecciona otra fecha."
         );
       } else if (isTimeBooked) {
         // Trigger toast if time is already booked
@@ -207,7 +207,7 @@ const Booking = ({ button }) => {
               <DatePicker
                 selected={date}
                 onChange={(date) => setDate(date)}
-                minDate={new Date()} // Disable past dates
+                minDate={new Date()}
                 placeholderText="Selecciona la fecha"
                 className="w-[175px] md:w-full border rounded-md text-base md:text-sm px-3 py-2 placeholder:text-gray-500"
               />
