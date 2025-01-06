@@ -108,6 +108,9 @@ const Booking = ({ button }) => {
     return `${String(hours).padStart(2, "0")}:${minute} ${period}`;
   };
 
+  const currentTime = new Date().toLocaleTimeString();
+  const today = new Date().toLocaleDateString();
+
   const saveBooking = () => {
     if (!name || !phone || !selectedService || !date || !selectedTimeSlot) {
       toast.error("Favor de llenar todos los campos requeridos.");
@@ -123,9 +126,17 @@ const Booking = ({ button }) => {
           appointment.client_name === name && appointment.date === formattedDate
       );
 
+      const isPastTime =
+        formatTime(selectedTimeSlot) <= formatTime(currentTime) &&
+        formattedDate === format(today, "yyyy-MM-dd");
+
       if (isPersonBooked) {
         toast.error(
           "Ya has agendado una cita para este día, por favor selecciona otra fecha."
+        );
+      } else if (isPastTime) {
+        toast.error(
+          "La hora seleccionada ya no está disponible para citas, por favor elija otra."
         );
       } else {
         // If the time is not booked, proceed to save the booking
@@ -182,9 +193,6 @@ const Booking = ({ button }) => {
       }
     }
   };
-
-  const currentTime = new Date().toLocaleTimeString();
-  const today = new Date().toLocaleDateString();
 
   const isSlotDisabled = (time) => {
     if (date) {
