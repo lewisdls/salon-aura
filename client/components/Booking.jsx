@@ -117,11 +117,10 @@ const Booking = ({ button }) => {
 
       const existingAppointments = appointments;
 
-      // Check if the selected time is already booked
-      const isTimeBooked = existingAppointments.some(
+      // Check if client has already booked for the selected date
+      const isPersonBooked = existingAppointments.some(
         (appointment) =>
-          appointment.time === regulatedTime &&
-          appointment.date === formattedDate
+          appointment.client_name === name && appointment.date === formattedDate
       );
 
       if (isPersonBooked) {
