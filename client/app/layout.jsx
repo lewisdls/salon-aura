@@ -1,4 +1,3 @@
-import localFont from "next/font/local";
 import "./globals.css";
 import { Outfit } from "next/font/google";
 import Navbar from "@/components/Navbar";
