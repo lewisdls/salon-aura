@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/select";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { format } from "date-fns";
+import { format, getDate } from "date-fns";
 
 const Booking = ({ button }) => {
   const [name, setName] = useState("");
@@ -82,22 +82,6 @@ const Booking = ({ button }) => {
     getTime();
   }, []);
 
-  // Convert 12-hour time format to 24-hour format for comparison (HH:mm)
-  const convertTo24HourFormat = (time) => {
-    const [hour, minutePeriod] = time.split(":");
-    const minute = minutePeriod.slice(0, 2);
-    const period = minutePeriod.slice(3); // AM or PM
-
-    let hours24 = parseInt(hour, 10);
-    if (period === "PM" && hours24 !== 12) {
-      hours24 += 12;
-    } else if (period === "AM" && hours24 === 12) {
-      hours24 = 0;
-    }
-
-    return `${String(hours24).padStart(2, "0")}:${minute}`;
-  };
-
   const regularTime = (time) => {
     const [hour, minutePeriod] = time.split(":");
     const minute = minutePeriod.slice(0, 2);
@@ -114,6 +98,8 @@ const Booking = ({ button }) => {
     minute: "2-digit",
   });
   const today = new Date().toLocaleDateString();
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
 
   const saveBooking = () => {
     if (!name || !phone || !selectedService || !date || !selectedTimeSlot) {
@@ -192,18 +178,13 @@ const Booking = ({ button }) => {
 
   const isSlotDisabled = (time) => {
     if (date) {
-      const formattedTime = convertTo24HourFormat(time.time);
-      const isPastTime =
-        formattedTime <= convertTo24HourFormat(currentTime) &&
-        format(date, "yyyy-MM-dd") === format(today, "yyyy-MM-dd");
-
       const isBooked = appointments.some(
         (appointment) =>
           regularTime(time.time) === appointment.time &&
           appointment.date === format(date, "yyyy-MM-dd")
       );
 
-      return isPastTime || isBooked;
+      return isBooked;
     }
     return false;
   };
@@ -240,7 +221,7 @@ const Booking = ({ button }) => {
               <DatePicker
                 selected={date}
                 onChange={(date) => setDate(date)}
-                minDate={new Date()}
+                minDate={tomorrow}
                 placeholderText="Selecciona la fecha"
                 className="w-[175px] md:w-full border rounded-md text-base md:text-sm px-3 py-2 placeholder:text-gray-500"
               />
