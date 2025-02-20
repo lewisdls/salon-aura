@@ -33,24 +33,20 @@ export async function POST(req) {
       headers: { "Content-Type": "application/json" },
     });
   }
-
-  /* const customerMessage = `Hola ${client_name}, tu cita ha sido confirmada para el día ${date} a las ${time}. El servicio que solicitaste es: ${service}. ¡Gracias por elegir nuestro salón!`;
-  const businessMessage = `Nueva cita: ${client_name} ha agendado una cita para el día ${date} a las ${time}. El servicio solicitado es: ${service}.`;
-  */
+  // const businessMessage = `Nueva cita: ${client_name} ha agendado una cita para el día ${date} a las ${time}. El servicio solicitado es: ${service}.`;
 
   try {
-    /* await client.messages.create({
+    await client.messages.create({
       from: `whatsapp:${twilioPhone}`,
-      to: `whatsapp:${client_phone}`,
-      body: customerMessage,
+      to: `whatsapp:+1${client_phone}`,
+      body: `Hola, ${client_name}. Tu cita ha sido agendada para el día ${date} a las ${time}. El servicio que solicitaste fue ${service}. ¡Gracias por elegir nuestro salón!`,
     });
 
-    await client.messages.create({
+    /* await client.messages.create({
       from: `whatsapp:${twilioPhone}`,
       to: `whatsapp:${businessPhone}`,
       body: businessMessage,
-    });
-    */
+    }); */
 
     const existingAppointment = await prisma.appointment.findFirst({
       where: {
