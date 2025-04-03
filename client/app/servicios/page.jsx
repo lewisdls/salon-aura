@@ -36,7 +36,7 @@ const Services = () => {
         <h1 className="text-5xl md:text-6xl leading-tight md:leading-snug font-semibold text-center">
           Servicios
         </h1>
-        <div className="flex flex-col gap-20 w-full">
+        <div className="flex flex-col gap-20 w-full pb-10">
           {loading
             ? "Loading..."
             : services.map((service) => (
@@ -58,7 +58,7 @@ const Services = () => {
                     <p className="text-xl leading-relaxed">
                       {service.description}
                     </p>
-                    <p className="text-xl font-medium">RD${service.price}</p>
+                    <p className="text-xl font-medium">{service.isVariable && "Desde "}RD${service.price}</p>
                     <Booking
                       button={
                         <button className="md:self-start bg-[#9E2B2A] text-white text-lg py-3 px-6 rounded-full mt-4 w-full md:w-auto">

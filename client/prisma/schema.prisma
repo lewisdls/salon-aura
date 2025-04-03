@@ -21,6 +21,7 @@ model Service {
   id          String   @id @default(uuid())
   name        String
   price       Int
+  isVariable Boolean @default(false)
   description String
   image        String
 }

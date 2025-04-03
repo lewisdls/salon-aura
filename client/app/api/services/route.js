@@ -4,7 +4,9 @@ const prisma = new PrismaClient();
 
 export async function GET() {
   try {
-    const services = await prisma.service.findMany();
+    const services = await prisma.service.findMany({
+      orderBy: { name: "asc" },
+    });
     return new Response(JSON.stringify(services), {
       status: 200,
       headers: { "Content-Type": "application/json" },
