@@ -43,6 +43,7 @@ export async function POST(req) {
         date,
         time,
         service,
+        username: "Salon Aura",
       }),
     });
     console.log(message);
