@@ -141,7 +141,7 @@ const Booking = ({ button }) => {
             });
 
             if (!res.ok) {
-              throw new Error(errorData.error || "Something went wrong");
+              throw new Error("Something went wrong");
             }
 
             const newAppointment = await res.json();
