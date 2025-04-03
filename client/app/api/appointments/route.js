@@ -1,6 +1,5 @@
+require("dotenv").config();
 import { PrismaClient } from "@prisma/client";
-
-require('dotenv').config()
 
 const prisma = new PrismaClient();;
 const client = require("twilio")(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_TOKEN);
