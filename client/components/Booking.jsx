@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/select";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { format, getDate } from "date-fns";
+import { format } from "date-fns";
 
 const Booking = ({ button }) => {
   const [name, setName] = useState("");
@@ -92,12 +92,6 @@ const Booking = ({ button }) => {
     return `${String(hours).padStart(2, "0")}:${minute} ${period}`;
   };
 
-  // Get the current local time in 'HH:mm' format
-  const currentTime = new Date().toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-  const today = new Date().toLocaleDateString();
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
 
@@ -108,71 +102,56 @@ const Booking = ({ button }) => {
       const formattedDate = format(date, "yyyy-MM-dd");
       const regulatedTime = regularTime(selectedTimeSlot);
 
-      const existingAppointments = appointments;
+      const data = {
+        client_name: name,
+        client_phone: phone,
+        service: selectedService,
+        date: formattedDate,
+        time: regulatedTime,
+      };
 
-      // Check if client has already booked for the selected date
-      const isPersonBooked = existingAppointments.some(
-        (appointment) =>
-          appointment.client_name === name && appointment.date === formattedDate
-      );
+      const bookAppointment = async () => {
+        try {
+          const res = await fetch("/api/appointments", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          });
 
-      if (isPersonBooked) {
-        toast.error(
-          "Ya has agendado una cita para este día, por favor selecciona otra fecha."
-        );
-      } else {
-        // If the time is not booked, proceed to save the booking
-        const data = {
-          client_name: name,
-          client_phone: phone,
-          service: selectedService,
-          date: formattedDate,
-          time: regulatedTime,
-        };
-
-        const bookAppointment = async () => {
-          try {
-            const res = await fetch("/api/appointments", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(data),
-            });
-
-            if (!res.ok) {
-              const errorData = await res.json();
-              if (res.status === 400 && errorData.error.includes("reservada")) {
-                throw new Error(errorData.error);
-              }
-              throw new Error(errorData.error || "Something went wrong");
+          if (!res.ok) {
+            const errorData = await res.json();
+            if (res.status === 400 && errorData.error.includes("reservada")) {
+              throw new Error(errorData.error);
             }
-
-            const newAppointment = await res.json();
-            setAppointments((prevAppointments) => [
-              ...prevAppointments,
-              newAppointment,
-            ]);
-
-            toast.success("La cita fue programada exitosamente!", {
-              description: `${formattedDate} a las ${regulatedTime}`,
-            });
-
-            setSelectedTimeSlot();
-          } catch (error) {
-            console.log(error);
-            if (error.message.includes("reservada")) {
-              toast.error(error.message);
-            } else {
-              toast.error(
-                "No se pudo programar la cita. Inténtalo de nuevo más tarde."
-              );
-            }
+            throw new Error(errorData.error || "Something went wrong");
           }
-        };
 
-        bookAppointment();
-      }
+          const newAppointment = await res.json();
+          setAppointments((prevAppointments) => [
+            ...prevAppointments,
+            newAppointment,
+          ]);
+
+          toast.success("La cita fue programada exitosamente!", {
+            description: `${formattedDate} a las ${regulatedTime}`,
+          });
+
+          setSelectedTimeSlot();
+        } catch (error) {
+          console.log(error);
+          if (error.message.includes("elige")) {
+            toast.error(error.message);
+          } else {
+            toast.error(
+              "No se pudo programar la cita. Inténtalo de nuevo más tarde."
+            );
+          }
+        }
+      };
+
+      bookAppointment();
     }
   };
 

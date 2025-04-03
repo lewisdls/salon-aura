@@ -6,7 +6,7 @@ import { Toaster } from "sonner";
 
 export const metadata = {
   title: "Salon Aura",
-  description: "Hair beauty salon",
+  description: "Relájate y deja tu belleza en nuestras manos",
 };
 
 const outfit = Outfit({ subsets: ["latin"] });

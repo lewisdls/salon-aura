@@ -4,22 +4,6 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();;
 var client = require("twilio")(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
-export async function GET() {
-  try {
-    const appointments = await prisma.appointment.findMany();
-    return new Response(JSON.stringify(appointments), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
-  } catch (error) {
-    console.error("Error fetching appointments:", error);
-    return new Response(
-      JSON.stringify({ error: "Failed to fetch appointments." }),
-      { status: 500 }
-    );
-  }
-}
-
 export async function POST(req) {
   const body = await req.json();
   const { client_name, client_phone, date, time, service } = body;
@@ -48,11 +32,29 @@ export async function POST(req) {
       },
     });
 
+    const personBooked = await prisma.appointment.findFirst({
+      where: {
+        client_name,
+        date,
+      },
+    })
+
     if (existingAppointment) {
       return new Response(
         JSON.stringify({
           error:
             "La hora seleccionada ya está reservada, por favor elige otra hora.",
+        }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    } else if (personBooked) {
+      return new Response(
+        JSON.stringify({
+          error:
+            "Ya tienes una cita para este día, por favor elige otra fecha.",
         }),
         {
           status: 400,
