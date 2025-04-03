@@ -4,7 +4,6 @@ const prisma = new PrismaClient();
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const twilioPhone = process.env.TWILIO_PHONE;
-const businessPhone = process.env.BUSINESS_PHONE;
 const client = require("twilio")(accountSid, authToken);
 
 export async function GET() {
@@ -33,27 +32,30 @@ export async function POST(req) {
       headers: { "Content-Type": "application/json" },
     });
   }
-  // const businessMessage = `Nueva cita: ${client_name} ha agendado una cita para el día ${date} a las ${time}. El servicio solicitado es: ${service}.`;
 
-  try {
-    await client.messages.create({
+  async function createMessage() {
+    const message = await client.messages.create({
       from: `whatsapp:${twilioPhone}`,
       to: `whatsapp:+1${client_phone}`,
-      body: `Hola, ${client_name}. Tu cita ha sido agendada para el día ${date} a las ${time}. El servicio que solicitaste fue ${service}. ¡Gracias por elegir nuestro salón!`,
+      contentSid: "HX856b551107a49db9e261fdd776e3d6a6",
+      contentVariables: JSON.stringify({
+        client_name,
+        date,
+        time,
+        service,
+      }),
     });
+    console.log(message);
+  }
 
-    /* await client.messages.create({
-      from: `whatsapp:${twilioPhone}`,
-      to: `whatsapp:${businessPhone}`,
-      body: businessMessage,
-    }); */
-
+  try {
     const existingAppointment = await prisma.appointment.findFirst({
       where: {
         date,
         time,
       },
     });
+
     if (existingAppointment) {
       return new Response(
         JSON.stringify({
@@ -66,6 +68,8 @@ export async function POST(req) {
         }
       );
     }
+
+    createMessage();
 
     const newAppointment = await prisma.appointment.create({
       data: {
@@ -83,6 +87,9 @@ export async function POST(req) {
     });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ success: false, error: "Failed to send messages." });
+    return new Response(
+      JSON.stringify({ success: false, error: "Failed to send messages." }),
+      { status: 500, headers: { "Content-Type": "application/json" } }
+    );
   }
 }
