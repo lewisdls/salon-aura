@@ -37,14 +37,7 @@ export async function POST(req) {
     const message = await client.messages.create({
       from: `whatsapp:${twilioPhone}`,
       to: `whatsapp:+1${client_phone}`,
-      contentSid: "HX856b551107a49db9e261fdd776e3d6a6",
-      contentVariables: JSON.stringify({
-        client_name,
-        date,
-        time,
-        service,
-        username: "Salon Aura",
-      }),
+      body: `Hola, ${client_name}. Tu cita ha sido agendada para el día ${date} a las ${time}. El servicio que solicitaste fue ${service}. ¡Gracias por elegir nuestro salón!`,
     });
     console.log(message);
   }
