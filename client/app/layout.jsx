@@ -16,9 +16,6 @@ const outfit = Outfit({ subsets: ["latin"] });
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <head>
-        <AdSense />
-      </head>
       <body className={outfit.className}>
         <Navbar />
         {children}
