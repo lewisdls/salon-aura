@@ -141,10 +141,6 @@ const Booking = ({ button }) => {
             });
 
             if (!res.ok) {
-              const errorData = await res.json();
-              if (res.status === 400 && errorData.error.includes("reservada")) {
-                throw new Error(errorData.error);
-              }
               throw new Error(errorData.error || "Something went wrong");
             }
 
