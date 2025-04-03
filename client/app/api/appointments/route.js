@@ -2,11 +2,8 @@ import { PrismaClient } from "@prisma/client";
 
 require('dotenv').config()
 
-const prisma = new PrismaClient();
-const accountSid = process.env.TWILIO_ACCOUNT_SID;
-const authToken = process.env.TWILIO_TOKEN;
-const twilioPhone = process.env.TWILIO_PHONE;
-const client = require("twilio")(accountSid, authToken);
+const prisma = new PrismaClient();;
+const client = require("twilio")(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_TOKEN);
 
 export async function GET() {
   try {
@@ -37,7 +34,7 @@ export async function POST(req) {
 
   async function createMessage() {
     const message = await client.messages.create({
-      from: `whatsapp:${twilioPhone}`,
+      from: `whatsapp:${process.env.TWILIO_PHONE}`,
       to: `whatsapp:+1${client_phone}`,
       body: `Hola, ${client_name}. Tu cita ha sido agendada para el día ${date} a las ${time}. El servicio que solicitaste fue ${service}. ¡Gracias por elegir nuestro salón!`,
     });
