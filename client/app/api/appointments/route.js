@@ -1,8 +1,32 @@
-require("dotenv")
+require("dotenv");
 import { PrismaClient } from "@prisma/client";
 
-const prisma = new PrismaClient();;
-var client = require("twilio")(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+const prisma = new PrismaClient();
+var client = require("twilio")(
+  process.env.TWILIO_ACCOUNT_SID,
+  process.env.TWILIO_AUTH_TOKEN
+);
+
+export async function GET() {
+  try {
+    const appointments = await prisma.appointment.findMany({
+      select: {
+        date: true,
+        time: true,
+      },
+    });
+    return new Response(JSON.stringify(appointments), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (error) {
+    console.error("Error fetching appointments:", error);
+    return new Response(
+      JSON.stringify({ error: "Failed to fetch appointments." }),
+      { status: 500 }
+    );
+  }
+}
 
 export async function POST(req) {
   const body = await req.json();
@@ -37,7 +61,7 @@ export async function POST(req) {
         client_name,
         date,
       },
-    })
+    });
 
     if (existingAppointment) {
       return new Response(
