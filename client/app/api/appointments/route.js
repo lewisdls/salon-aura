@@ -4,7 +4,7 @@ require('dotenv').config()
 
 const prisma = new PrismaClient();
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
-const authToken = process.env.TWILIO_AUTH_TOKEN;
+const authToken = process.env.TWILIO_TOKEN;
 const twilioPhone = process.env.TWILIO_PHONE;
 const client = require("twilio")(accountSid, authToken);
 
