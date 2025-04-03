@@ -33,7 +33,7 @@ export async function POST(req) {
 
   async function createMessage() {
     const message = await client.messages.create({
-      from: `whatsapp:${process.env.TWILIO_PHONE}`,
+      from: `whatsapp:${process.env.TWILIO_NUMBER}`,
       to: `whatsapp:+1${client_phone}`,
       body: `Hola, ${client_name}. Tu cita ha sido agendada para el día ${date} a las ${time}. El servicio que solicitaste fue ${service}. ¡Gracias por elegir nuestro salón!`,
     });
