@@ -69,7 +69,7 @@ export async function POST(req) {
       );
     }
 
-    createMessage();
+    await createMessage();
 
     const newAppointment = await prisma.appointment.create({
       data: {
