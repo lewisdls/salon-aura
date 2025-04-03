@@ -2,7 +2,7 @@ require("dotenv").config();
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();;
-const client = require("twilio")(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+var client = require("twilio")(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
 export async function GET() {
   try {
