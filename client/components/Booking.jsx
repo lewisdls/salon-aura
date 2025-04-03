@@ -140,10 +140,6 @@ const Booking = ({ button }) => {
               body: JSON.stringify(data),
             });
 
-            if (!res.ok) {
-              throw new Error("Something went wrong");
-            }
-
             const newAppointment = await res.json();
             setAppointments((prevAppointments) => [
               ...prevAppointments,
