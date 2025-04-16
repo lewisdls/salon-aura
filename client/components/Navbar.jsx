@@ -61,7 +61,7 @@ const Navbar = () => {
       <div className="hidden md:bg-transparent md:static md:flex flex-col md:flex-row justify-center md:justify-start items-center gap-6">
         <NavLinks />
       </div>
-      <Link href="/" className="playfair text-[2.3rem] md:text-5xl font-medium">
+      <Link href="/" className="text-[2.3rem] md:text-5xl font-medium">
         Salon Aura
       </Link>
       <div className="flex items-center gap-6">

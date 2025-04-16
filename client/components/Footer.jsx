@@ -42,7 +42,7 @@ const Footer = () => {
       <div className="flex flex-col lg:items-end gap-6">
         <Link
           href="/"
-          className="playfair text-[2.3rem] md:text-5xl font-medium"
+          className="text-[2.3rem] md:text-5xl font-medium"
         >
           Salon Aura
         </Link>
