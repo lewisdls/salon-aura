@@ -3,8 +3,7 @@ import { Outfit } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Toaster } from "sonner";
-import Script from "next/script";
-import AdSense from "@/components/AdSense";
+import { Analytics } from "@vercel/analytics/react"
 
 export const metadata = {
   title: "Salon Aura",
@@ -21,6 +20,7 @@ export default function RootLayout({ children }) {
         {children}
         <Toaster />
         <Footer />
+        <Analytics />
       </body>
     </html>
   );
