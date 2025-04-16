@@ -60,12 +60,14 @@ const Team = () => {
             <button
               onClick={prevSlide}
               className="p-4 rounded-full bg-black text-white"
+              aria-label="Previous"
             >
               <FaArrowLeft />
             </button>
             <button
               onClick={nextSlide}
               className="p-4 rounded-full text-gray-500 border-gray-400 border-[1px]"
+              aria-label="Next"
             >
               <FaArrowRight />
             </button>

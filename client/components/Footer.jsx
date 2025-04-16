@@ -7,7 +7,7 @@ import Booking from "./Booking";
 const Footer = () => {
   return (
     <div className="bg-[#121212] py-12 px-6 md:p-16 flex flex-col md:grid md:grid-cols-3 items-center gap-10 text-center md:text-left text-white">
-      <Link href="https://maps.app.goo.gl/FVqNF2viganCoi3D7" target="_blank">
+      <Link aria-label="Find our location" href="https://maps.app.goo.gl/FVqNF2viganCoi3D7" target="_blank">
         <img src="/map.png" alt="" className="rounded-3xl" />
       </Link>
       <div className="flex flex-col gap-10 items-center">
@@ -28,13 +28,13 @@ const Footer = () => {
           </p>
         </div>
         <div className="flex gap-6 text-2xl">
-          <Link href="https://www.instagram.com/salonaura_/" target="_blank">
+          <Link aria-label="Visit our Instagram" href="https://www.instagram.com/salonaura_/" target="_blank">
             <FaInstagram />
           </Link>
-          <Link href="https://wa.me/18094674141" target="_blank">
+          <Link aria-label="Text us" href="https://wa.me/18094674141" target="_blank">
             <FaWhatsapp />
           </Link>
-          <Link href="mailto:aurafdls19@hotmail.com">
+          <Link aria-label="Email us" href="mailto:aurafdls19@hotmail.com">
             <FiMail />
           </Link>
         </div>
