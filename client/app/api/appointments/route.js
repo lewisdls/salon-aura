@@ -2,10 +2,11 @@ require("dotenv");
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
-var client = require("twilio")(
+const client = require("twilio")(
   process.env.TWILIO_ACCOUNT_SID,
   process.env.TWILIO_AUTH_TOKEN
 );
+const sgMail = require("@sendgrid/mail");
 
 export async function GET() {
   try {
@@ -42,10 +43,28 @@ export async function POST(req) {
   async function createMessage() {
     const message = await client.messages.create({
       from: `whatsapp:${process.env.TWILIO_NUMBER}`,
-      to: `whatsapp:+1${client_phone}`,
+      to: `whatsapp:+1${client_phone.replace(/\D/g, "")}`,
       body: `Hola, ${client_name}. Tu cita ha sido agendada para el día ${date} a las ${time}. El servicio que solicitaste fue ${service}. ¡Gracias por elegir nuestro salón!`,
     });
     console.log(message);
+  }
+
+  async function createEmail() {
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+    const msg = {
+      to: "burbjs21@gmail.com",
+      from: "lewisdls21@hotmail.com",
+      subject: "Confirmación de cita",
+      text: `${client_name} ha agendado una cita para el día ${date} a las ${time}. El servicio elegido fue ${service}`,
+    };
+    sgMail
+      .send(msg)
+      .then(() => {
+        console.log("Email sent");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
 
   try {
@@ -88,6 +107,8 @@ export async function POST(req) {
     }
 
     await createMessage();
+
+    await createEmail();
 
     const newAppointment = await prisma.appointment.create({
       data: {

@@ -15,7 +15,7 @@ const Team = () => {
         const data = await res.json();
         setMembers(data);
       } catch (error) {
-        console.log(error);
+        console.error("Error fetching members:", error);
       }
     };
     fetchMembers();

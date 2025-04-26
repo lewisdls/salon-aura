@@ -36,6 +36,24 @@ const Booking = ({ button }) => {
   const [services, setServices] = useState([]);
   const [appointments, setAppointments] = useState([]);
 
+  const handlePhoneChange = (e) => {
+    let input = e.target.value.replace(/\D/g, "");
+
+    let formatted;
+    
+    if (input.length > 6) {
+      formatted = `(${input.slice(0, 3)}) ${input.slice(3, 6)}-${input.slice(
+        6
+      )}`;
+    } else if (input.length > 3) {
+      formatted = `(${input.slice(0, 3)}) ${input.slice(3)}`;
+    } else if (input.length > 0) {
+      formatted = `(${input}`;
+    }
+
+    setPhone(formatted);
+  };
+
   useEffect(() => {
     const fetchApps = async () => {
       try {
@@ -192,7 +210,8 @@ const Booking = ({ button }) => {
               id="phone"
               type="tel"
               value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              onChange={handlePhoneChange}
+              maxLength={14}
               placeholder="Ingresa tu número de celular"
               className="text-base md:text-sm"
             />
