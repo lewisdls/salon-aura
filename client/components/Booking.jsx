@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { MdAccessTime } from "react-icons/md";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { toast } from "sonner";
 import { Button } from "./ui/button";
 import {
@@ -35,6 +36,7 @@ const Booking = ({ button }) => {
   const [selectedTimeSlot, setSelectedTimeSlot] = useState();
   const [services, setServices] = useState([]);
   const [appointments, setAppointments] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handlePhoneChange = (e) => {
     let input = e.target.value.replace(/\D/g, "");
@@ -114,6 +116,8 @@ const Booking = ({ button }) => {
   tomorrow.setDate(tomorrow.getDate() + 1);
 
   const saveBooking = () => {
+    if (isSubmitting) return;
+
     if (!name || !phone || !selectedService || !date || !selectedTimeSlot) {
       toast.error("Favor de llenar todos los campos requeridos.");
     } else {
@@ -129,6 +133,7 @@ const Booking = ({ button }) => {
       };
 
       const bookAppointment = async () => {
+        setIsSubmitting(true);
         try {
           const res = await fetch("/api/appointments", {
             method: "POST",
@@ -166,6 +171,8 @@ const Booking = ({ button }) => {
               "No se pudo programar la cita. Inténtalo de nuevo más tarde."
             );
           }
+        } finally {
+          setIsSubmitting(false);
         }
       };
 
@@ -271,9 +278,17 @@ const Booking = ({ button }) => {
           <Button
             type="submit"
             onClick={() => saveBooking()}
+            disabled={isSubmitting}
             className="bg-oxblood text-white hover:bg-oxblood-deep rounded-full px-8"
           >
-            Confirmar
+            {isSubmitting ? (
+              <>
+                <AiOutlineLoading3Quarters className="mr-2 h-4 w-4 animate-spin" />
+                Confirmando...
+              </>
+            ) : (
+              "Confirmar"
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>
