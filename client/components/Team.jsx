@@ -67,7 +67,7 @@ const Team = () => {
                 <img
                   src={member.image}
                   alt={`${member.name}, ${member.role} en Salon Aura`}
-                  className="pointer-events-none h-[94%] w-auto object-contain object-bottom transition-transform duration-500 group-hover:scale-[1.03]"
+                  className="pointer-events-none h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                 />
               </div>
               <figcaption className="mt-4">

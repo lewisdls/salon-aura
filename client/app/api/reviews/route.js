@@ -1,10 +1,16 @@
+import { headers } from "next/headers";
+
 // Proxies the Yotpo Site Reviews widget CDN so the browser never calls Yotpo
 // directly (avoids CORS) and the response is cached for an hour.
 const YOTPO_APP_KEY =
-  process.env.YOTPO_APP_KEY || "3FWcB1j854hQP82lPpICdcbE0ZZoV7vsrBYi6osG";
+  process.env.YOTPO_APP_KEY;
+
+const locale = process.env.NEXT_PUBLIC_LOCALE || "es";
 
 export async function GET() {
-  const url = `https://api-cdn.yotpo.com/v1/widget/${YOTPO_APP_KEY}/products/yotpo_site_reviews/reviews.json?per_page=50&page=1`;
+  const headersList = await headers();
+  const locale = headersList.get("accept-language").split(',')[0] || "en";
+  const url = `https://api-cdn.yotpo.com/v3/storefront/store/${YOTPO_APP_KEY}/product/yotpo_site_reviews/reviews?perPage=50&page=1&lang=${locale}`;
 
   try {
     const res = await fetch(url, { next: { revalidate: 3600 } });
@@ -14,23 +20,22 @@ export async function GET() {
     }
 
     const data = await res.json();
-    const response = data?.response ?? {};
 
-    const reviews = (response.reviews ?? [])
+    const reviews = (data.reviews ?? [])
       .filter((r) => !r.deleted && r.content)
       .map((r) => ({
         id: r.id,
         score: r.score,
         title: r.title ?? "",
         content: r.content ?? "",
-        name: r.user?.display_name ?? "Cliente",
-        date: r.created_at ?? null,
-        verified: Boolean(r.verified_buyer),
+        name: r.user?.displayName ?? "Cliente",
+        date: r.createdAt ?? null,
+        verified: Boolean(r.verifiedBuyer),
       }));
 
     const bottomline = {
-      average: response.bottomline?.average_score ?? null,
-      total: response.bottomline?.total_review ?? reviews.length,
+      average: data.bottomline?.averageScore ?? null,
+      total: data.bottomline?.totalReview ?? reviews.length,
     };
 
     return new Response(JSON.stringify({ reviews, bottomline }), {
