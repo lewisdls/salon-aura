@@ -37,6 +37,15 @@ const Booking = ({ button }) => {
   const [services, setServices] = useState([]);
   const [appointments, setAppointments] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  const resetForm = () => {
+    setName("");
+    setPhone("");
+    setSelectedService(undefined);
+    setDate(undefined);
+    setSelectedTimeSlot(undefined);
+  };
 
   const handlePhoneChange = (e) => {
     let input = e.target.value.replace(/\D/g, "");
@@ -161,7 +170,8 @@ const Booking = ({ button }) => {
             description: `${formattedDate} a las ${regulatedTime}`,
           });
 
-          setSelectedTimeSlot();
+          resetForm();
+          setOpen(false);
         } catch (error) {
           console.log(error);
           if (error.message.includes("elige")) {
@@ -194,7 +204,7 @@ const Booking = ({ button }) => {
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{button}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
