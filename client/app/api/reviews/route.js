@@ -5,8 +5,6 @@ import { headers } from "next/headers";
 const YOTPO_APP_KEY =
   process.env.YOTPO_APP_KEY;
 
-const locale = process.env.NEXT_PUBLIC_LOCALE || "es";
-
 export async function GET() {
   const headersList = await headers();
   const locale = headersList.get("accept-language").split(',')[0] || "en";
