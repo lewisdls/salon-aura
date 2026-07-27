@@ -7,9 +7,11 @@ const YOTPO_APP_KEY =
 
 export async function GET() {
   const headersList = await headers();
-  const locale = headersList.get("accept-language").split(',')[0] || "en";
+  const acceptLanguage = headersList.get("accept-language") || "es";
+  // Normalize "pt-PT,pt;q=0.9,en;q=0.8" -> "pt" so region variants share a
+  // cache entry and Yotpo receives a clean 2-letter lang code.
+  const locale = acceptLanguage.split(",")[0].split("-")[0].toLowerCase() || "es";
   const url = `https://api-cdn.yotpo.com/v3/storefront/store/${YOTPO_APP_KEY}/product/yotpo_site_reviews/reviews?perPage=50&page=1&lang=${locale}`;
-
   try {
     const res = await fetch(url, { next: { revalidate: 3600 } });
 
@@ -41,6 +43,9 @@ export async function GET() {
       headers: {
         "Content-Type": "application/json",
         "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
+        // Key the CDN cache by language so a Spanish response isn't served to
+        // Portuguese/other-locale visitors.
+        Vary: "Accept-Language",
       },
     });
   } catch (error) {
