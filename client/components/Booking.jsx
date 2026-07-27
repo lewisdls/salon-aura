@@ -268,7 +268,11 @@ const Booking = ({ button }) => {
           </div>
         </div>
         <DialogFooter>
-          <Button type="submit" onClick={() => saveBooking()}>
+          <Button
+            type="submit"
+            onClick={() => saveBooking()}
+            className="bg-oxblood text-white hover:bg-oxblood-deep rounded-full px-8"
+          >
             Confirmar
           </Button>
         </DialogFooter>

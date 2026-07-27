@@ -1,65 +1,97 @@
+"use client";
+
+import { motion, useReducedMotion } from "framer-motion";
 import { FaPeopleGroup, FaStar, FaScissors, FaLeaf } from "react-icons/fa6";
 
+const reasons = [
+  {
+    icon: FaScissors,
+    title: "Equipo experto",
+    text: "Estilistas con años de experiencia, siempre a la vanguardia de las últimas tendencias.",
+  },
+  {
+    icon: FaLeaf,
+    title: "Productos premium",
+    text: "Trabajamos con las mejores marcas del mercado: resultados efectivos y seguros para tu salud.",
+  },
+  {
+    icon: FaStar,
+    title: "Ambiente que relaja",
+    text: "Un espacio cómodo, moderno y acogedor, diseñado para que desconectes y te consientas.",
+  },
+  {
+    icon: FaPeopleGroup,
+    title: "Trato personal",
+    text: "Escuchamos tus necesidades y adaptamos cada servicio para que salgas sintiéndote increíble.",
+  },
+];
+
 const WhyUs = () => {
+  const reduce = useReducedMotion();
+
   return (
-    <div
-      id="about"
-      className="bg-[#9E2B2A] py-12 px-6 md:py-20 md:px-16 flex flex-col lg:flex-row text-center lg:text-left text-white gap-16"
-    >
-      <div className="w-full flex flex-col gap-12 lg:gap-0 items-center lg:items-start lg:justify-between">
-        <div className="flex flex-col gap-6">
-          <h1 className="text-5xl md:text-6xl lg:w-max">Por Qué Nosotros</h1>
-          <p className="text-xl font-light leading-relaxed">
-            Calidad y profesionalismo en cada servicio donde tu belleza y
-            bienestar son nuestra prioridad
-          </p>
-        </div>
-        <div className="text-xl font-light leading-relaxed flex gap-16">
+    <section id="about" className="bg-oxblood py-[var(--section-y)] text-white">
+      <div className="container-x grid gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
+        {/* Left: statement + stats */}
+        <div className="flex flex-col justify-between gap-12">
           <div>
-            <p className="text-4xl font-medium">+100</p>
-            <p>Clientes satisfechos</p>
+            <span className="kicker text-white/80">Por qué nosotros</span>
+            <h2 className="mt-4 text-headline font-semibold">
+              Tu belleza y bienestar, nuestra prioridad
+            </h2>
+            <p className="mt-5 max-w-[42ch] text-lg leading-relaxed text-white/85">
+              Calidad y profesionalismo en cada servicio. Cada visita a Salon
+              Aura está pensada para que te sientas cuidada de principio a fin.
+            </p>
           </div>
-          <div>
-            <p className="text-4xl font-medium">1</p>
-            <p>Salon en la ciudad</p>
+          <div className="flex gap-12">
+            <div>
+              <p className="text-5xl font-semibold tracking-tight md:text-6xl">
+                +100
+              </p>
+              <p className="mt-1 text-sm text-white/70">Clientes satisfechos</p>
+            </div>
+            <div className="border-l border-white/20 pl-12">
+              <p className="text-5xl font-semibold tracking-tight md:text-6xl">
+                100%
+              </p>
+              <p className="mt-1 text-sm text-white/70">Estilo personalizado</p>
+            </div>
           </div>
         </div>
+
+        {/* Right: reasons as a divided list */}
+        <ul className="divide-y divide-white/15 border-y border-white/15">
+          {reasons.map((r, i) => {
+            const Icon = r.icon;
+            return (
+              <motion.li
+                key={r.title}
+                initial={reduce ? { opacity: 0 } : { opacity: 0, x: 24 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{
+                  duration: 0.6,
+                  delay: i * 0.08,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+                className="flex items-start gap-5 py-6"
+              >
+                <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-oxblood-light text-xl">
+                  <Icon />
+                </span>
+                <div>
+                  <h3 className="text-xl font-semibold">{r.title}</h3>
+                  <p className="mt-1.5 max-w-[52ch] leading-relaxed text-white/80">
+                    {r.text}
+                  </p>
+                </div>
+              </motion.li>
+            );
+          })}
+        </ul>
       </div>
-      <div className="flex flex-col md:grid md:grid-cols-2 gap-4 md:text-left">
-        <div className="bg-[#B03A3A] flex flex-col md:flex-row items-center gap-6 rounded-xl p-6">
-          <FaPeopleGroup className="text-4xl lg:text-[5rem]" />
-          <p className="font-light leading-relaxed">
-            Nuestro equipo está formado por estilistas capacitados y con años de
-            experiencia en el sector. Nos mantenemos a la vanguardia de las
-            últimas tendencias para ofrecerte siempre lo mejor.
-          </p>
-        </div>
-        <div className="bg-[#B03A3A] flex flex-col md:flex-row items-center gap-6 rounded-xl p-6">
-          <FaScissors className="text-4xl lg:text-[5rem]" />
-          <p className="font-light leading-relaxed">
-            Utilizamos productos de las mejores marcas del mercado, garantizando
-            que cada tratamiento sea no solo efectivo, sino también seguro para
-            tu salud y bienestar.
-          </p>
-        </div>
-        <div className="bg-[#B03A3A] flex flex-col md:flex-row items-center gap-6 rounded-xl p-6">
-          <FaLeaf className="text-4xl lg:text-[5rem]" />
-          <p className="font-light leading-relaxed">
-            Creemos que tu visita al salón debe ser más que un simple servicio
-            de belleza. Disfruta de un ambiente cómodo, moderno y relajante,
-            diseñado para que desconectes y te consientas.
-          </p>
-        </div>
-        <div className="bg-[#B03A3A] flex flex-col md:flex-row items-center gap-6 rounded-xl p-6">
-          <FaStar className="text-4xl lg:text-[5rem]" />
-          <p className="font-light leading-relaxed">
-            Tu satisfacción es nuestra prioridad. Escuchamos tus necesidades y
-            personalizamos cada servicio para que salgas de nuestro salón
-            sintiéndote increíble y con ganas de regresar.
-          </p>
-        </div>
-      </div>
-    </div>
+    </section>
   );
 };
 

@@ -1,19 +1,21 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
+import { FiArrowUpRight } from "react-icons/fi";
+
+const panels = ["bg-rose", "bg-stone", "bg-sand", "bg-clay"];
 
 const Team = () => {
-  const [current, setCurrent] = useState(0);
   const [members, setMembers] = useState([]);
+  const reduce = useReducedMotion();
 
   useEffect(() => {
     const fetchMembers = async () => {
       try {
         const res = await fetch("/api/members");
         const data = await res.json();
-        setMembers(data);
+        setMembers(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error("Error fetching members:", error);
       }
@@ -21,95 +23,64 @@ const Team = () => {
     fetchMembers();
   }, []);
 
-  const prevSlide = () => {
-    current !== 0 && setCurrent(current - 1);
-  };
-
-  const nextSlide = () => {
-    current === members.length - 1 ? setCurrent(0) : setCurrent(current + 1);
-  };
   return (
-    <div
-      id="team"
-      className="bg-[#FAF5F1] py-12 px-6 md:py-24 md:px-16 flex flex-col md:flex-row md:justify-between gap-20 text-center md:text-left overflow-hidden"
-    >
-      <motion.div
-        initial={{ opacity: -1, translateX: -100 }}
-        whileInView={{ opacity: 1, translateX: 0 }}
-        transition={{
-          duration: 1,
-          delay: 0.2,
-          ease: [0, 0.71, 0.2, 1.01],
-        }}
-        className="flex flex-col items-center gap-6 lg:gap-0 md:items-start justify-between"
-      >
-        <div className="flex flex-col gap-6">
-          <h1 className="text-5xl md:text-6xl">Nuestro Equipo</h1>
-          <p className="text-xl font-light leading-relaxed">
-            Deja tu look en las manos de nuestro equipo de talentosas y
-            creativas estilistas.
-          </p>
-        </div>
-        <div className="hidden md:flex items-center gap-6">
-          <a className="md:flex" href="mailto:aurafdls19@hotmail.com">
-            <button className="bg-[#9E2B2A] text-white text-lg font-normal py-4 px-6 rounded-full md:w-max">
-              Unete al equipo
+    <section id="team" className="bg-cream py-[var(--section-y)]">
+      <div className="container-x">
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-2xl">
+            <span className="kicker">Nuestro equipo</span>
+            <h2 className="mt-4 text-headline font-semibold text-ink">
+              Manos talentosas y creativas
+            </h2>
+            <p className="mt-5 max-w-[48ch] text-lg leading-relaxed text-ink-soft">
+              Deja tu look en manos de un equipo que ama lo que hace y cuida
+              cada detalle como si fuera propio.
+            </p>
+          </div>
+          <a href="mailto:aurafdls19@hotmail.com" className="w-max">
+            <button className="group inline-flex items-center gap-2 rounded-full border border-ink/20 px-7 py-4 text-base font-medium text-ink transition-colors hover:border-oxblood hover:text-oxblood">
+              Únete al equipo
+              <FiArrowUpRight className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </button>
           </a>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={prevSlide}
-              className="p-4 rounded-full bg-black text-white"
-              aria-label="Previous"
-            >
-              <FaArrowLeft />
-            </button>
-            <button
-              onClick={nextSlide}
-              className="p-4 rounded-full text-gray-500 border-gray-400 border-[1px]"
-              aria-label="Next"
-            >
-              <FaArrowRight />
-            </button>
-          </div>
         </div>
-      </motion.div>
-      <motion.div
-        className="overflow-hidden"
-        initial={{ opacity: -1, translateX: 100 }}
-        whileInView={{ opacity: 1, translateX: 0 }}
-        transition={{
-          duration: 0.8,
-          delay: 0.4,
-          ease: [0, 0.71, 0.2, 1.01],
-        }}
-      >
-        <motion.div
-          className={`flex flex-col md:flex-row gap-10 lg:gap-6 transition-all duration-300`}
-          style={{ transform: `translateX(-${current * 349}px)` }}
-        >
-          {members?.map((member) => {
-            return (
-              <div key={member.id} className="flex flex-col w-full">
-                <div
-                  className={`h-[375px] lg:w-[325px] bg-[#DAD1C9] rounded-3xl flex items-end justify-center`}
-                >
-                  <img
-                    src={member.image}
-                    alt=""
-                    className="object-cover pointer-events-none h-[350px]"
-                  />
-                </div>
-                <div className="flex flex-col mt-4">
-                  <h2 className="text-2xl">{member.name}</h2>
-                  <p className="text-base font-light">{member.role}</p>
-                </div>
+
+        <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {members.map((member, i) => (
+            <motion.figure
+              key={member.id}
+              initial={reduce ? { opacity: 0 } : { opacity: 0, y: 28 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{
+                duration: 0.7,
+                delay: i * 0.1,
+                ease: [0.16, 1, 0.3, 1],
+              }}
+              className="group"
+            >
+              <div
+                className={`relative flex h-[26rem] items-end justify-center overflow-hidden rounded-4xl ${
+                  panels[i % panels.length]
+                }`}
+              >
+                <img
+                  src={member.image}
+                  alt={`${member.name}, ${member.role} en Salon Aura`}
+                  className="pointer-events-none h-[94%] w-auto object-contain object-bottom transition-transform duration-500 group-hover:scale-[1.03]"
+                />
               </div>
-            );
-          })}
-        </motion.div>
-      </motion.div>
-    </div>
+              <figcaption className="mt-4">
+                <h3 className="text-xl font-semibold text-ink">
+                  {member.name}
+                </h3>
+                <p className="text-ink-soft">{member.role}</p>
+              </figcaption>
+            </motion.figure>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 };
 
