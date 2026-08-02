@@ -34,10 +34,10 @@ model Member {
 }
 
 model Drink {
-  id          Int   @id @default(autoincrement())
+  id          BigInt   @id @default(autoincrement())
   name        String
   description String?
-  price       Int
+  price       Decimal
   created_at  DateTime @default(now())
   category    String
 }
