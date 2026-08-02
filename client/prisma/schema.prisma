@@ -37,7 +37,7 @@ model Drink {
   id          BigInt   @id @default(autoincrement())
   name        String
   description String?
-  price       Float   @db.Float4
+  price       Float
   created_at  DateTime @default(now())
   category    String
 }
