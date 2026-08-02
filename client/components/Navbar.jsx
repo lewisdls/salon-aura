@@ -32,6 +32,7 @@ const Navbar = () => {
   const links = [
     { href: "/", label: "Inicio" },
     { href: "/servicios", label: "Servicios" },
+    { href: "/bar", label: "Bar" },
     { href: "/#visitanos", label: "Visítanos" },
   ];
 

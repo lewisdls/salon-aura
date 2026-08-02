@@ -4,6 +4,7 @@ import Services from "@/components/Services";
 import Team from "@/components/Team";
 import WhyUs from "@/components/WhyUs";
 import Reviews from "@/components/Reviews";
+import Bar from "@/components/Bar";
 
 const App = () => {
   return (
@@ -12,6 +13,7 @@ const App = () => {
       <Services />
       <Schedule />
       <WhyUs />
+      <Bar />
       <Reviews />
       <Team />
     </>
