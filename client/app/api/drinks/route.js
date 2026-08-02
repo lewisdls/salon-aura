@@ -7,7 +7,11 @@ export async function GET() {
     const drinks = await prisma.drink.findMany({
       orderBy: { price: "asc" },
     });
-    return new Response(JSON.stringify(drinks), {
+
+    const serializedDrinks = JSON.parse(JSON.stringify(drinks, (_, value) => 
+    typeof value === 'bigint' ? value.toString() : value));
+
+    return new Response(JSON.stringify(serializedDrinks), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
