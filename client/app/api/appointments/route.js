@@ -1,5 +1,6 @@
 require("dotenv");
 import { PrismaClient } from "@prisma/client";
+import { sendAppointmentConfirmation } from "../whatsapp/appointment";
 
 const prisma = new PrismaClient();
 
@@ -83,6 +84,8 @@ export async function POST(req) {
         service,
       },
     });
+
+    await sendAppointmentConfirmation(client_phone, client_name, date, time);
 
     return new Response(JSON.stringify(newAppointment), {
       status: 201,
