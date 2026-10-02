@@ -82,7 +82,7 @@ const Reviews = () => {
           <div className="max-w-2xl">
             <span className="kicker">Reseñas</span>
             <h2 className="mt-4 text-headline font-semibold text-ink">
-              Lo que dicen nuestras clientas
+              Lo que dicen nuestros clientes
             </h2>
           </div>
           {average && (
