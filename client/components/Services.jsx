@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { FiArrowUpRight } from "react-icons/fi";
@@ -8,21 +9,21 @@ const categories = [
   {
     name: "Cortes",
     copy: "Cortes y peinados pensados para tu estilo propio.",
-    image: "/short-hair.png",
+    image: { src: "/short-hair.webp", width: 800, height: 909 },
     bg: "bg-oxblood",
     text: "text-white",
   },
   {
     name: "Coloraciones",
     copy: "Color, mechas y diseños hechos a tu medida.",
-    image: "/dyed-hair.png",
+    image: { src: "/dyed-hair.webp", width: 800, height: 800 },
     bg: "bg-clay",
     text: "text-ink",
   },
   {
     name: "Extensiones",
     copy: "Volumen y largo con acabado natural.",
-    image: "/blonde-hair.png",
+    image: { src: "/blonde-hair.webp", width: 800, height: 800 },
     bg: "bg-sand",
     text: "text-ink",
   },
@@ -96,10 +97,11 @@ const Services = () => {
                 >
                   {cat.copy}
                 </p>
-                <img
-                  src={cat.image}
+                <Image
+                  {...cat.image}
                   alt=""
                   aria-hidden="true"
+                  sizes="320px"
                   className="pointer-events-none absolute inset-x-0 bottom-0 mx-auto h-[75%] w-auto object-contain object-bottom drop-shadow-2xl transition-transform duration-500 group-hover:scale-[1.04]"
                 />
               </Link>

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import { FaWhatsapp } from "react-icons/fa";
 import Booking from "./Booking";
@@ -16,7 +17,14 @@ const Hero = () => {
   return (
     <section className="relative flex min-h-[70vh] md:min-h-[min(76vh,720px)] w-full flex-col overflow-hidden text-white">
       {/* Photograph */}
-      <div className="absolute inset-0 bg-[url('/hero-img.jpg')] bg-cover bg-center" />
+      <Image
+        src="/hero-img.jpg"
+        alt=""
+        fill
+        priority
+        sizes="100vw"
+        className="object-cover object-center"
+      />
       {/* Warm scrim: darker toward the bottom-left where the copy sits */}
       <div
         className="absolute inset-0"

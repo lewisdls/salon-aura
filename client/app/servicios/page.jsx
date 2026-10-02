@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
+import { canOptimizeImage } from "@/lib/utils";
 import Booking from "@/components/Booking";
 import { motion, useReducedMotion } from "framer-motion";
 import { FaWhatsapp } from "react-icons/fa";
@@ -74,11 +76,15 @@ const Services = () => {
                 }`}
               >
                 <div className="w-full lg:w-[55%]">
-                  <div className="overflow-hidden rounded-4xl shadow-soft">
-                    <img
+                  <div className="relative h-[340px] overflow-hidden rounded-4xl shadow-soft md:h-[460px]">
+                    <Image
                       src={service.image}
                       alt={service.name}
-                      className="h-[340px] w-full object-cover md:h-[460px]"
+                      fill
+                      priority={i === 0}
+                      sizes="(min-width: 1024px) 55vw, 100vw"
+                      unoptimized={!canOptimizeImage(service.image)}
+                      className="object-cover"
                     />
                   </div>
                 </div>

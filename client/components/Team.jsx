@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+import { canOptimizeImage } from "@/lib/utils";
 import { motion, useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { FiArrowUpRight } from "react-icons/fi";
@@ -64,10 +66,13 @@ const Team = () => {
                   panels[i % panels.length]
                 }`}
               >
-                <img
+                <Image
                   src={member.image}
                   alt={`${member.name}, ${member.role} en Salon Aura`}
-                  className="pointer-events-none h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                  fill
+                  sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                  unoptimized={!canOptimizeImage(member.image)}
+                  className="pointer-events-none object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                 />
               </div>
               <figcaption className="mt-4">
