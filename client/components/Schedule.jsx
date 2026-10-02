@@ -61,7 +61,7 @@ const Schedule = () => {
 
           {/* Location */}
           <div className="flex flex-col overflow-hidden rounded-4xl bg-white shadow-soft">
-            <iframe className="group relative block h-56 overflow-hidden md:h-64" src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d397.6802834032047!2d-69.81682207788306!3d18.511099104365833!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8eaf86596ef899db%3A0xc675a1c554ad6ea7!2sSalon%20Aura!5e0!3m2!1sen!2sdo!4v1785217228177!5m2!1sen!2sdo" style={{ border: 0}} allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+            <iframe className="group relative block h-56 overflow-hidden md:h-64" src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d397.6802834032047!2d-69.81682207788306!3d18.511099104365833!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8eaf86596ef899db%3A0xc675a1c554ad6ea7!2sSalon%20Aura!5e0!3m2!1sen!2sdo!4v1785217228177!5m2!1sen!2sdo" style={{ border: 0}} allowFullScreen="" loading="lazy" referrerPolicy="strict-origin-when-cross-origin"></iframe>
             <div className="flex flex-1 flex-col gap-5 p-8 md:p-10">
               <div className="flex items-start gap-3">
                 <FiMapPin className="mt-1 shrink-0 text-xl text-oxblood" />

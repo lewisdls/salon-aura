@@ -15,7 +15,7 @@ const Hero = () => {
   });
 
   return (
-    <section className="relative flex min-h-[92vh] w-full flex-col overflow-hidden text-white">
+    <section className="relative flex min-h-[70vh] md:min-h-[92vh] w-full flex-col overflow-hidden text-white">
       {/* Photograph */}
       <div className="absolute inset-0 bg-[url('/hero-img.jpg')] bg-cover bg-center" />
       {/* Warm scrim: darker toward the bottom-left where the copy sits */}
@@ -73,44 +73,6 @@ const Hero = () => {
           </a>
         </motion.div>
       </div>
-
-      {/* Info bar */}
-      <motion.div
-        {...rise(0.4)}
-        className="relative z-10 border-t border-white/15 bg-charcoal/40 backdrop-blur-md"
-      >
-        <dl className="container-x grid grid-cols-1 divide-y divide-white/10 py-4 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
-          <div className="flex items-center gap-3 py-3 sm:py-1 sm:pr-6">
-            <FiClock className="shrink-0 text-xl text-clay" />
-            <div>
-              <dt className="text-xs uppercase tracking-wide text-white/75">
-                Horario
-              </dt>
-              <dd className="text-sm font-medium">Lun–Sáb · 9 AM–9 PM</dd>
-            </div>
-          </div>
-          <div className="flex items-center gap-3 py-3 sm:py-1 sm:px-6">
-            <FiMapPin className="shrink-0 text-xl text-clay" />
-            <div>
-              <dt className="text-xs uppercase tracking-wide text-white/75">
-                Ubicación
-              </dt>
-              <dd className="text-sm font-medium">
-                Club de Leones 9, Santo Domingo Este
-              </dd>
-            </div>
-          </div>
-          <div className="flex items-center gap-3 py-3 sm:py-1 sm:pl-6">
-            <FiHeart className="shrink-0 text-xl text-clay" />
-            <div>
-              <dt className="text-xs uppercase tracking-wide text-white/75">
-                Clientes felices
-              </dt>
-              <dd className="text-sm font-medium">+100 y contando</dd>
-            </div>
-          </div>
-        </dl>
-      </motion.div>
     </section>
   );
 };

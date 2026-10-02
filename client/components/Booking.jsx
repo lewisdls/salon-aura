@@ -98,7 +98,7 @@ const Booking = ({ button }) => {
     timeList.push({
       time: "12:00 PM",
     });
-    for (let i = 1; i <= 8; i++) {
+    for (let i = 1; i <= 6; i++) {
       timeList.push({
         time: i + ":00 PM",
       });
