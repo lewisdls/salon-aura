@@ -127,8 +127,3 @@
       );
   }
 }
-
-/* Keep the date picker readable within the booking dialog */
-.react-datepicker-wrapper {
-  width: 100%;
-}

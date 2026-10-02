@@ -23,9 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import { format } from "date-fns";
+import { format, parse } from "date-fns";
 
 const Booking = ({ button }) => {
   const [name, setName] = useState("");
@@ -88,28 +86,64 @@ const Booking = ({ button }) => {
     fetchServices();
   }, []);
 
-  const getTime = () => {
+  // Opening hours per weekday (0 = Sunday). null means closed.
+  const businessHours = {
+    0: { start: 9, end: 12 },
+    1: { start: 9, end: 18 },
+    2: null,
+    3: { start: 9, end: 18 },
+    4: { start: 9, end: 18 },
+    5: { start: 9, end: 18 },
+    6: { start: 9, end: 18 },
+  };
+
+  const isOpenDay = (day) => businessHours[day.getDay()] !== null;
+
+  const getTime = (selectedDate) => {
     const timeList = [];
-    for (let i = 9; i <= 11; i++) {
-      timeList.push({
-        time: i + ":00 AM",
-      });
-    }
-    timeList.push({
-      time: "12:00 PM",
-    });
-    for (let i = 1; i <= 6; i++) {
-      timeList.push({
-        time: i + ":00 PM",
-      });
+    const hours = selectedDate
+      ? businessHours[selectedDate.getDay()]
+      : { start: 9, end: 18 };
+
+    if (hours) {
+      for (let i = hours.start; i <= hours.end; i++) {
+        const period = i < 12 ? "AM" : "PM";
+        const hour = i > 12 ? i - 12 : i;
+        timeList.push({
+          time: hour + ":00 " + period,
+        });
+      }
     }
 
-    setTimeSlot(timeList);
+    return timeList;
   };
 
   useEffect(() => {
-    getTime();
-  }, []);
+    setTimeSlot(getTime(date));
+  }, [date]);
+
+  const handleDateChange = (e) => {
+    const newDate = e.target.value
+      ? parse(e.target.value, "yyyy-MM-dd", new Date())
+      : undefined;
+
+    // The native date input can't disable weekdays, so reject closed days here
+    if (newDate && !isOpenDay(newDate)) {
+      toast.error("Los martes estamos cerrados. Por favor elige otro día.");
+      setDate(undefined);
+      setSelectedTimeSlot(undefined);
+      return;
+    }
+
+    setDate(newDate);
+    // Drop the selected time if it's outside the new day's hours
+    if (
+      newDate &&
+      !getTime(newDate).some((slot) => slot.time === selectedTimeSlot)
+    ) {
+      setSelectedTimeSlot(undefined);
+    }
+  };
 
   const regularTime = (time) => {
     const [hour, minutePeriod] = time.split(":");
@@ -232,33 +266,33 @@ const Booking = ({ button }) => {
               placeholder="Ingresa tu número de celular"
               className="text-base md:text-sm"
             />
-            <div className="flex lg:flex-col gap-4">
-              <DatePicker
-                selected={date}
-                onChange={(date) => setDate(date)}
-                minDate={tomorrow}
-                placeholderText="Selecciona la fecha"
-                className="w-[175px] md:w-full border rounded-md text-base md:text-sm px-3 py-2 placeholder:text-gray-500"
-              />
-              <Select
-                value={selectedService}
-                onValueChange={setSelectedService}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecciona el servicio a realizar" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Servicios</SelectLabel>
-                    {services?.map((service) => (
-                      <SelectItem value={service.name} key={service.id}>
-                        {service.name}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
+            <Input
+              id="date"
+              type="date"
+              value={date ? format(date, "yyyy-MM-dd") : ""}
+              onChange={handleDateChange}
+              min={format(tomorrow, "yyyy-MM-dd")}
+              aria-label="Selecciona la fecha"
+              className="text-base md:text-sm"
+            />
+            <Select
+              value={selectedService}
+              onValueChange={setSelectedService}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Selecciona el servicio a realizar" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Servicios</SelectLabel>
+                  {services?.map((service) => (
+                    <SelectItem value={service.name} key={service.id}>
+                      {service.name}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
           </div>
           <div className="flex flex-col gap-3">
             <p className="text-sm flex gap-2 items-center text-[#9CA3A3]">
