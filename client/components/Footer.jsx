@@ -165,8 +165,9 @@ const Footer = () => {
             </span>
           </Link>
           <div className="mt-5 text-white/60">
-            <p>Lun–Sáb · 9 AM–9 PM</p>
+            <p>Lun–Sáb · 9 AM–7 PM</p>
             <p>Domingo · 9 AM–1 PM</p>
+            <p>Martes · Cerrado</p>
           </div>
           <div className="mt-6">
             <Booking

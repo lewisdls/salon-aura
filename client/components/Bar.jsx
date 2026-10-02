@@ -55,7 +55,7 @@ const Bar = () => {
 
         {/* Visual — swap this block for a real photo:
             <img src="/bar.jpg" alt="El bar de Salon Aura" className="h-full w-full rounded-4xl object-cover" /> */}
-        <motion.div
+        {/*<motion.div
           initial={reduce ? { opacity: 0 } : { opacity: 0, y: 28 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
@@ -67,6 +67,7 @@ const Bar = () => {
             Foto próximamente
           </span>
         </motion.div>
+        */}
       </div>
     </section>
   );

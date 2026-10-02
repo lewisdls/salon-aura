@@ -2,7 +2,6 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import { FaWhatsapp } from "react-icons/fa";
-import { FiClock, FiMapPin, FiHeart } from "react-icons/fi";
 import Booking from "./Booking";
 
 const Hero = () => {
@@ -15,7 +14,7 @@ const Hero = () => {
   });
 
   return (
-    <section className="relative flex min-h-[70vh] md:min-h-[92vh] w-full flex-col overflow-hidden text-white">
+    <section className="relative flex min-h-[70vh] md:min-h-[min(76vh,720px)] w-full flex-col overflow-hidden text-white">
       {/* Photograph */}
       <div className="absolute inset-0 bg-[url('/hero-img.jpg')] bg-cover bg-center" />
       {/* Warm scrim: darker toward the bottom-left where the copy sits */}

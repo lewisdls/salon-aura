@@ -3,7 +3,7 @@ import { FiMapPin, FiPhone, FiArrowUpRight } from "react-icons/fi";
 import Booking from "./Booking";
 
 const hours = [
-  { day: "Lunes a Sábado", time: "9 AM – 9 PM" },
+  { day: "Lunes a Sábado", time: "9 AM – 7 PM" },
   { day: "Domingo", time: "9 AM – 1 PM" },
   { day: "Martes", time: "Cerrado", closed: true },
 ];

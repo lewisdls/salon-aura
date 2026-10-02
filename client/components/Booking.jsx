@@ -25,6 +25,13 @@ import {
 } from "@/components/ui/select";
 import { format, parse } from "date-fns";
 
+// Radix Select picks an item on pointerup and closes immediately, so on touch
+// screens the browser's follow-up click lands on whatever is underneath (the
+// time slots). Cancelling touchend stops that click from being fired.
+const preventGhostClick = (node) => {
+  node?.addEventListener("touchend", (e) => e.preventDefault());
+};
+
 const Booking = ({ button }) => {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -68,6 +75,7 @@ const Booking = ({ button }) => {
       try {
         const response = await fetch("/api/appointments");
         const data = await response.json();
+        if (!response.ok) throw new Error(data.error);
         setAppointments(data);
       } catch (error) {
         console.error("Error fetching appointments:", error);
@@ -77,6 +85,7 @@ const Booking = ({ button }) => {
       try {
         const response = await fetch("/api/services");
         const data = await response.json();
+        if (!response.ok) throw new Error(data.error);
         setServices(data);
       } catch (error) {
         console.error("Error fetching services:", error);
@@ -282,7 +291,7 @@ const Booking = ({ button }) => {
               <SelectTrigger>
                 <SelectValue placeholder="Selecciona el servicio a realizar" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent ref={preventGhostClick}>
                 <SelectGroup>
                   <SelectLabel>Servicios</SelectLabel>
                   {services?.map((service) => (
