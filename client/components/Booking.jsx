@@ -284,17 +284,27 @@ const Booking = ({ button }) => {
               placeholder="Ingresa tu número de celular"
               className="text-base md:text-sm"
             />
-            <Input
-              id="date"
-              type="date"
-              value={date ? format(date, "yyyy-MM-dd") : ""}
-              onChange={handleDateChange}
-              min={minDate}
-              aria-label="Selecciona la fecha"
-              // iOS Safari sizes date inputs by its own native styling and
-              // overflows the form unless appearance is reset
-              className="min-w-0 max-w-full appearance-none text-base md:text-sm [&::-webkit-date-and-time-value]:text-left"
-            />
+            <div className="relative">
+              <Input
+                id="date"
+                type="date"
+                value={date ? format(date, "yyyy-MM-dd") : ""}
+                onChange={handleDateChange}
+                min={minDate}
+                aria-label="Selecciona la fecha"
+                // iOS Safari sizes date inputs by its own native styling and
+                // overflows the form unless appearance is reset
+                className={`peer min-w-0 max-w-full appearance-none text-base md:text-sm [&::-webkit-date-and-time-value]:text-left ${
+                  date ? "" : "[&:not(:focus)]:text-transparent"
+                }`}
+              />
+              {/* Native date inputs have no placeholder (iOS shows a blank box), so fake one */}
+              {!date && (
+                <span className="pointer-events-none absolute left-[13px] top-1/2 -translate-y-1/2 text-base text-neutral-500 peer-focus:hidden md:text-sm">
+                  Selecciona la fecha
+                </span>
+              )}
+            </div>
             <Select
               value={selectedService}
               onValueChange={setSelectedService}
