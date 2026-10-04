@@ -55,8 +55,7 @@ const Hero = () => {
           {...rise(0.2)}
           className="mt-6 max-w-[46ch] text-lg font-light leading-relaxed text-white/90 md:text-xl md:leading-[2rem]"
         >
-          Más que un lugar para cortarte el pelo, un refugio cálido donde tu
-          estilo único es el centro de atención.
+          Primero te escuchamos y después trabajamos. Cortes, color y tratamientos a tu medida.
         </motion.p>
 
         <motion.div
