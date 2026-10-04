@@ -1,13 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { motion, useReducedMotion } from "framer-motion";
+import { useReducedMotion } from "framer-motion";
 import { FiArrowUpRight } from "react-icons/fi";
-import { FaMartiniGlassCitrus, FaWineGlass, FaBottleWater } from "react-icons/fa6";
+import { FaMartiniGlassCitrus, FaBottleWater } from "react-icons/fa6";
 
 const highlights = [
-  { icon: FaMartiniGlassCitrus, label: "Cócteles de autor" },
-  { icon: FaWineGlass, label: "Vinos & espumosos" },
+  { icon: FaMartiniGlassCitrus, label: "Cócteles exquisitos" },
   { icon: FaBottleWater, label: "Bebidas refrescantes" },
 ];
 
