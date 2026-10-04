@@ -136,6 +136,14 @@ const Booking = ({ button }) => {
       ? parse(e.target.value, "yyyy-MM-dd", new Date())
       : undefined;
 
+    // iOS Safari ignores the input's min attribute, so reject past dates here
+    if (newDate && e.target.value < minDate) {
+      toast.error("Por favor elige una fecha a partir de mañana.");
+      setDate(undefined);
+      setSelectedTimeSlot(undefined);
+      return;
+    }
+
     // The native date input can't disable weekdays, so reject closed days here
     if (newDate && !isOpenDay(newDate)) {
       toast.error("Los martes estamos cerrados. Por favor elige otro día.");
@@ -166,6 +174,7 @@ const Booking = ({ button }) => {
 
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
+  const minDate = format(tomorrow, "yyyy-MM-dd");
 
   const saveBooking = () => {
     if (isSubmitting) return;
@@ -280,9 +289,11 @@ const Booking = ({ button }) => {
               type="date"
               value={date ? format(date, "yyyy-MM-dd") : ""}
               onChange={handleDateChange}
-              min={format(tomorrow, "yyyy-MM-dd")}
+              min={minDate}
               aria-label="Selecciona la fecha"
-              className="text-base md:text-sm"
+              // iOS Safari sizes date inputs by its own native styling and
+              // overflows the form unless appearance is reset
+              className="min-w-0 max-w-full appearance-none text-base md:text-sm [&::-webkit-date-and-time-value]:text-left"
             />
             <Select
               value={selectedService}
